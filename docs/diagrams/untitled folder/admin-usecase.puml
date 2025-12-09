@@ -1,0 +1,55 @@
+@startuml
+title WealthNest — Combined Use Case Diagram (True Portrait)
+
+' Force top-to-bottom stacking and narrower width
+top to bottom direction
+skinparam rectangle {
+  BackgroundColor White
+  BorderColor Black
+}
+skinparam usecase {
+  BackgroundColor White
+  BorderColor Black
+}
+
+left actor "User" as U
+right actor "Admin" as A
+
+rectangle "WealthNest System" {
+  rectangle "User Functions" {
+    (Sign Up - Email Verification) as UC1
+    (Login) as UC2
+    (View Wallet) as UC3
+    (View Portfolio) as UC4
+    (Buy Stocks) as UC5
+    (Buy Mutual Funds) as UC6
+    (View Activity / History) as UC7
+  }
+
+  rectangle "Admin Functions" {
+    (Admin Login) as AC1
+    (View Users) as AC2
+    (Ban/Unban User) as AC3
+    (Manage Assets) as AC4
+    (View Reports) as AC5
+    (View Audit Logs) as AC6
+  }
+}
+
+' Draw vertical connections (downward arrows)
+U -down-> UC1
+U -down-> UC2
+U -down-> UC3
+U -down-> UC4
+U -down-> UC5
+U -down-> UC6
+U -down-> UC7
+
+A -down-> AC1
+A -down-> AC2
+A -down-> AC3
+A -down-> AC4
+A -down-> AC5
+A -down-> AC6
+
+@enduml

@@ -1,0 +1,8 @@
+Recommended SVG illustrations (download separately and place under src/assets/):
+- undraw_investing
+- undraw_savings
+- undraw_growth_curve
+- storyset_investment_portfolio
+- storyset_finance_dashboard
+
+Use small lightweight SVGs. Reference them in Hero or Highlights components as needed.

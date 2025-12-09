@@ -1,0 +1,45 @@
+@startuml BuyAssetSequence
+title WealthNest — Buy Asset Transaction
+
+actor User
+participant "Frontend (React)" as Frontend
+participant "Supabase Auth" as Auth
+participant "Backend (.NET API)" as Backend
+database "Supabase DB" as DB
+participant "Admin Panel" as Admin
+
+== User Buys Asset ==
+User -> Frontend : Click "Buy Asset"
+Frontend -> Auth : Request OTP
+Auth -> DB : Log OTP request
+DB --> Auth : OTP stored
+Auth --> User : Send OTP (SMS/Email)
+
+User -> Frontend : Enter OTP
+Frontend -> Auth : Verify OTP
+Auth -> DB : Validate OTP
+DB --> Auth : OTP valid
+Auth --> Frontend : OTP success
+
+== Process Transaction ==
+Frontend -> Backend : POST /buy {assetId, qty}
+Backend -> DB : Insert Transaction (pending)
+Backend -> DB : Deduct wallet balance
+Backend -> DB : Update Portfolio_Holdings
+Backend -> DB : Insert into Client_Fund_Ledger
+Backend -> DB : Update System_Financials
+Backend -> DB : Mark Transaction completed
+DB --> Backend : Commit success
+Backend --> Frontend : Return confirmation
+Frontend --> User : Show "Purchase Successful"
+
+== Admin Oversight ==
+Admin -> DB : View Transactions + Ledger
+DB --> Admin : Show records
+Admin -> Backend : (Optional) Reverse Transaction
+Backend -> DB : Insert reversal entries
+Backend -> DB : Update Wallet + Transaction status
+DB --> Backend : Commit success
+Backend --> Admin : Reversal complete
+
+@enduml

@@ -1,0 +1,251 @@
+
+@startuml
+' ERD for WealthNest - Optimized for A4
+
+!define RECTANGLE(x) rectangle x
+skinparam backgroundColor transparent
+skinparam dpi 200
+skinparam shadowing false
+skinparam roundCorner 8
+skinparam defaultTextAlignment left
+skinparam defaultFontSize 7
+skinparam rectangle {
+  BorderColor #2B6CB0
+  BackgroundColor #F7FAFC
+  Shadowing false
+  roundCorner 8
+  FontSize 8
+}
+skinparam usecase {
+  BackgroundColor #E6F2FF
+  BorderColor #2B6CB0
+  FontSize 6
+  Padding 2
+}
+skinparam arrow {
+  FontSize 6
+}
+
+' Layout - 3 rows
+left to right direction
+skinparam linetype polyline
+skinparam maxMessageSize 40
+
+' --- Entities as rounded rectangles ---
+' Row 1: User & Core Entities
+rectangle "USERS\n*user_id" as E_USERS
+rectangle "WALLETS\n*wallet_id" as E_WALLETS
+rectangle "PORTFOLIOS\n*portfolio_id" as E_PORTFOLIOS
+rectangle "LEADERBOARD\n*leaderboard_id" as E_LEADER
+
+' Row 2: Investment & Trading
+rectangle "HOLDINGS\n*holding_id" as E_HOLDINGS
+rectangle "ASSETS\n*asset_id" as E_ASSETS
+rectangle "TRANSACTIONS\n*transaction_id" as E_TRANSACTIONS
+
+' Row 3: Admin
+rectangle "ADMINS\n*admin_id" as E_ADMINS
+rectangle "AUDIT_LOG\n*log_id" as E_AAUDIT
+rectangle "ADMIN_LOG\n*id" as E_ALOG
+
+' Layout: Row 1 horizontal arrangement
+E_USERS -[hidden]right- E_WALLETS
+E_WALLETS -[hidden]right- E_PORTFOLIOS
+E_PORTFOLIOS -[hidden]right- E_LEADER
+
+' Layout: Row 2 horizontal arrangement
+E_HOLDINGS -[hidden]right- E_ASSETS
+E_ASSETS -[hidden]right- E_TRANSACTIONS
+
+' Layout: Row 3 horizontal arrangement
+E_ADMINS -[hidden]right- E_AAUDIT
+E_AAUDIT -[hidden]right- E_ALOG
+
+' Layout: Vertical separation between rows
+E_USERS -[hidden]down- E_HOLDINGS
+E_WALLETS -[hidden]down- E_ASSETS
+E_PORTFOLIOS -[hidden]down- E_TRANSACTIONS
+E_LEADER -[hidden]down- E_TRANSACTIONS
+E_HOLDINGS -[hidden]down- E_ADMINS
+E_ASSETS -[hidden]down- E_AAUDIT
+E_TRANSACTIONS -[hidden]down- E_ALOG
+
+
+' --- Attributes as ovals (usecases) around USERS ---
+usecase "name" as A_name
+usecase "email" as A_email
+usecase "phone" as A_phone
+usecase "pwd_hash" as A_pass
+usecase "birthdate" as A_birth
+usecase "address" as A_addr
+usecase "created_at" as A_created
+usecase "status" as A_status
+usecase "pin" as A_pin
+
+' connect attributes to USERS
+A_name -[hidden]-> E_USERS
+A_email -[hidden]-> E_USERS
+A_phone -[hidden]-> E_USERS
+A_pass -[hidden]-> E_USERS
+A_birth -[hidden]-> E_USERS
+A_addr -[hidden]-> E_USERS
+A_created -[hidden]-> E_USERS
+A_status -[hidden]-> E_USERS
+A_pin -[hidden]-> E_USERS
+
+A_name .. E_USERS
+A_email .. E_USERS
+A_phone .. E_USERS
+A_pass .. E_USERS
+A_birth .. E_USERS
+A_addr .. E_USERS
+A_created .. E_USERS
+A_status .. E_USERS
+A_pin .. E_USERS
+
+' --- Attributes for WALLETS ---
+usecase "user_id" as W_userid
+usecase "balance" as W_balance
+usecase "currency" as W_currency
+usecase "updated_at" as W_wupdated
+
+W_userid .. E_WALLETS
+W_balance .. E_WALLETS
+W_currency .. E_WALLETS
+W_wupdated .. E_WALLETS
+
+' --- PORTFOLIOS attributes ---
+usecase "user_id" as P_userid
+usecase "created_at" as P_created
+usecase "last_updated" as P_updated
+
+P_userid .. E_PORTFOLIOS
+P_created .. E_PORTFOLIOS
+P_updated .. E_PORTFOLIOS
+
+' --- HOLDINGS attributes ---
+usecase "portfolio_id" as H_portfolioid
+usecase "asset_id" as H_assetid
+usecase "quantity" as H_quantity
+usecase "avg_price" as H_avg
+usecase "created_at" as H_created
+
+H_portfolioid .. E_HOLDINGS
+H_assetid .. E_HOLDINGS
+H_quantity .. E_HOLDINGS
+H_avg .. E_HOLDINGS
+H_created .. E_HOLDINGS
+
+' --- ASSETS attributes ---
+usecase "asset_type" as A_type
+usecase "symbol" as A_symbol
+usecase "name" as A_name_asset
+usecase "price" as A_price
+usecase "updated_at" as A_updated
+usecase "change%" as A_change
+
+A_type .. E_ASSETS
+A_symbol .. E_ASSETS
+A_name_asset .. E_ASSETS
+A_price .. E_ASSETS
+A_updated .. E_ASSETS
+A_change .. E_ASSETS
+
+' --- TRANSACTIONS attributes ---
+usecase "user_id" as T_userid
+usecase "wallet_id" as T_walletid
+usecase "asset_id" as T_assetid
+usecase "type" as T_type
+usecase "amount" as T_amount
+usecase "quantity" as T_quantity
+usecase "status" as T_status
+usecase "created_at" as T_created
+
+T_userid .. E_TRANSACTIONS
+T_walletid .. E_TRANSACTIONS
+T_assetid .. E_TRANSACTIONS
+T_type .. E_TRANSACTIONS
+T_amount .. E_TRANSACTIONS
+T_quantity .. E_TRANSACTIONS
+T_status .. E_TRANSACTIONS
+T_created .. E_TRANSACTIONS
+
+' --- ADMINS attributes ---
+usecase "name" as AD_name
+usecase "email" as AD_email
+usecase "pwd_hash" as AD_pass
+usecase "role" as AD_role
+usecase "created_at" as AD_created
+usecase "supabase_id" as AD_supabase
+usecase "is_active" as AD_active
+usecase "updated_at" as AD_updated
+
+AD_name .. E_ADMINS
+AD_email .. E_ADMINS
+AD_pass .. E_ADMINS
+AD_role .. E_ADMINS
+AD_created .. E_ADMINS
+AD_supabase .. E_ADMINS
+AD_active .. E_ADMINS
+AD_updated .. E_ADMINS
+
+' --- AUDIT_LOG attributes ---
+usecase "admin_id" as AA_adminid
+usecase "action" as AA_action
+usecase "details" as AA_details
+usecase "timestamp" as AA_time
+
+AA_adminid .. E_AAUDIT
+AA_action .. E_AAUDIT
+AA_details .. E_AAUDIT
+AA_time .. E_AAUDIT
+
+' --- ADMIN_LOG attributes ---
+usecase "admin_id" as AL_adminid
+usecase "email" as AL_email
+usecase "event" as AL_event
+usecase "ip_address" as AL_ip
+usecase "user_agent" as AL_agent
+usecase "metadata" as AL_meta
+usecase "timestamp" as AL_time
+
+AL_adminid .. E_ALOG
+AL_email .. E_ALOG
+AL_event .. E_ALOG
+AL_ip .. E_ALOG
+AL_agent .. E_ALOG
+AL_meta .. E_ALOG
+AL_time .. E_ALOG
+
+' --- LEADERBOARD attributes ---
+usecase "user_id" as L_userid
+usecase "points" as L_points
+usecase "rank" as L_rank
+usecase "badge" as L_badge
+
+L_userid .. E_LEADER
+L_points .. E_LEADER
+L_rank .. E_LEADER
+L_badge .. E_LEADER
+
+
+' --- Relationships (lines) ---
+' Row 1 relationships
+E_USERS .. E_WALLETS : "1:N"
+E_USERS .. E_PORTFOLIOS : "1:N"
+E_USERS .. E_LEADER : "1:1"
+
+' Cross-row relationships (Row 1 to Row 2)
+E_PORTFOLIOS .. E_HOLDINGS : "1:N"
+E_USERS .. E_TRANSACTIONS : "1:N"
+E_WALLETS .. E_TRANSACTIONS : "1:N"
+
+' Row 2 relationships
+E_ASSETS .. E_HOLDINGS : "1:N"
+E_ASSETS .. E_TRANSACTIONS : "1:N"
+
+' Row 3 relationships
+E_ADMINS .. E_ALOG : "1:N"
+E_ADMINS .. E_AAUDIT : "1:N"
+
+@enduml

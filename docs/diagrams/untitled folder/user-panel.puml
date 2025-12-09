@@ -1,0 +1,83 @@
+@startuml WealthNest_UserPanel_Simple
+title WealthNest — User Panel 
+
+actor User
+participant "User UI" as UI
+participant "Auth Service (Supabase)" as Auth
+database "Postgres DB" as DB
+participant "Market Price API" as MarketAPI
+participant "Payment Gateway" as Payment
+participant "Email Service" as Email
+participant "Notification Service" as Notif
+
+== Signup (email verification) ==
+User -> UI : Open signup (name, email, password)
+UI -> Auth : Create user (email, password)
+Auth -> DB : Insert user (status = unverified)
+DB --> Auth : user saved
+Auth -> Email : Send verification email (token)
+Email --> User : Deliver verification link
+User -> UI : Click verification link
+UI -> Auth : Verify token
+Auth -> DB : Update user.status = active
+DB --> Auth : updated
+Auth --> UI : Signup success
+UI --> User : Show "Account activated"
+
+== Login ==
+User -> UI : Enter email + password
+UI -> Auth : Authenticate
+Auth -> DB : Verify credentials + status
+DB --> Auth : valid
+Auth --> UI : Return session token
+UI --> User : Show dashboard
+
+== View Wallet ==
+User -> UI : Click "Wallet"
+UI -> DB : Request wallet balance (via API)
+DB --> UI : Return balance + recent transactions
+UI --> User : Show wallet
+
+== View Portfolio ==
+User -> UI : Click "Portfolio"
+UI -> DB : Request holdings
+DB --> UI : Return holdings (asset_id, qty, avg_price)
+UI -> MarketAPI : Ask for current prices
+MarketAPI --> UI : Return current prices
+UI --> User : Show portfolio value and P&L
+
+== Buy Stocks ==
+User -> UI : Select stock, enter qty or amount
+UI -> Payment : Start payment (reserve funds)
+Payment -> User : Complete payment
+Payment -> UI : Return payment success
+UI -> DB : Create transaction (type=buy, asset_type=stock)
+DB --> UI : Transaction saved (pending)
+UI -> MarketAPI : Get latest stock price
+MarketAPI --> UI : Price returned
+UI -> DB : Update portfolio_holdings (insert/update)
+DB --> UI : Holdings updated
+UI -> DB : Update wallets and client_fund_ledger
+DB --> UI : Wallet & ledger updated
+UI --> Notif : Send confirmation
+Notif --> User : "Stock purchase complete"
+
+== Buy Mutual Funds ==
+User -> UI : Select mutual fund, enter amount
+UI -> Payment : Start payment
+Payment -> UI : Confirm payment
+UI -> DB : Create transaction (type=buy, asset_type=mutual_fund)
+DB --> UI : Transaction saved
+UI -> DB : Calculate units based on NAV (or market API)
+DB --> UI : Update portfolio_holdings
+DB --> UI : Update wallets and ledger
+UI --> Notif : Send confirmation
+Notif --> User : "Mutual fund purchase complete"
+
+== View Activity ==
+User -> UI : Click "Activity"
+UI -> DB : Request transaction history
+DB --> UI : Return list
+UI --> User : Show activity timeline
+
+@enduml

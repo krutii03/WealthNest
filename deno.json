@@ -1,0 +1,32 @@
+{
+  "tasks": {
+    "dev": "deno run --allow-net --allow-env --allow-read --allow-write --watch=static/,routes/ dev.ts"
+  },
+  "importMap": "./import_map.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "lib": ["deno.window", "esnext"],
+    "strict": true
+  },
+  "lint": {
+    "include": ["**/*.ts", "**/*.tsx"],
+    "exclude": ["**/node_modules"]
+  },
+  "fmt": {
+    "files": {
+      "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.json"],
+      "exclude": [
+        "**/node_modules",
+        "**/dist",
+        "**/build"
+      ]
+    },
+    "options": {
+      "useTabs": false,
+      "lineWidth": 80,
+      "indentWidth": 2,
+      "singleQuote": true,
+      "semiColons": true
+    }
+  }
+}

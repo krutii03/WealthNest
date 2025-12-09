@@ -1,0 +1,34 @@
+
+@startuml
+' Minimal Sequence Diagram - Admin Login and Asset Update (transparent)
+skinparam backgroundColor transparent
+skinparam dpi 300
+skinparam roundCorner 8
+skinparam shadowing false
+
+actor Admin
+participant AdminUI as "Admin Frontend"
+participant Auth as "Supabase Auth"
+participant AdminAPI as "ASP.NET Admin API"
+participant AssetsDB as "Assets DB"
+participant Audit as "Admin Audit Log"
+
+Admin -> AdminUI : Open Admin Portal / Login
+AdminUI -> Auth : Authenticate (email/password)
+Auth --> AdminUI : JWT Token (role=admin)
+AdminUI -> AdminAPI : GET /admin/dashboard (Bearer token)
+AdminAPI -> AssetsDB : Fetch asset list & stats
+AssetsDB --> AdminAPI : assets
+AdminAPI --> AdminUI : dashboard payload
+
+Admin -> AdminUI : Update Asset Price / Edit Asset
+AdminUI -> AdminAPI : PUT /admin/assets/{id} (payload, token)
+AdminAPI -> Auth : Verify token & role
+AdminAPI -> AssetsDB : Update asset record (price, metadata)
+AssetsDB --> AdminAPI : updated asset
+AdminAPI -> Audit : Log action (update_asset, admin_id, details)
+Audit --> AdminAPI : logged
+AdminAPI --> AdminUI : Success response
+AdminUI -> Admin : Show confirmation / updated table
+
+@enduml

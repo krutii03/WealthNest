@@ -1,0 +1,45 @@
+@startuml
+' CRC Cards - Admin & System Management Components
+skinparam backgroundColor transparent
+skinparam dpi 300
+skinparam roundCorner 6
+skinparam shadowing false
+skinparam defaultTextAlignment left
+skinparam classFontSize 11
+skinparam classAttributeIconSize 0
+
+' ----------------- Admin Components -----------------
+class admins {
+  == Responsibilities ==
+  - Store admin profile (name, email)
+  - Manage roles (superadmin/employee)
+  - Link to Supabase auth (supabase_user_id)
+  - Track active status
+  == Collaborators ==
+  - admin_audit_log, admin_log
+}
+
+class admin_audit_log {
+  == Responsibilities ==
+  - Store admin actions (action, details)
+  - Track timestamp of actions
+  - Link to admin_id
+  == Collaborators ==
+  - admins
+}
+
+class admin_log {
+  == Responsibilities ==
+  - Store login events (event type)
+  - Track IP address & user agent
+  - Store metadata (JSONB)
+  == Collaborators ==
+  - admins
+}
+
+' Layout: Horizontal connections
+admins -[hidden]- admin_audit_log
+admin_audit_log -[hidden]- admin_log
+
+@enduml
+

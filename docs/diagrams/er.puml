@@ -1,0 +1,170 @@
+
+@startuml
+' Enhanced ERD for WealthNest - prettier layout, transparent background
+skinparam backgroundColor transparent
+skinparam dpi 300
+skinparam roundCorner 6
+skinparam shadowing false
+skinparam defaultTextAlignment left
+skinparam entityBorderThickness 1
+skinparam entityBackgroundColor #D9EEF7
+skinparam noteBackgroundColor #FFF3C4
+skinparam noteBorderColor #D9A441
+
+' Entities with attributes (PKs marked with *)
+entity "users" as users << (U,#9CC3E6) >> {
+  * user_id : uuid
+  name : varchar
+  email : varchar (unique)
+  phone : varchar
+  password_hash : varchar
+  birthdate : date
+  address : text
+  created_at : timestamp
+  status : varchar
+  pin : bigint
+}
+
+entity "wallets" as wallets << (W,#BEE7D1) >> {
+  * wallet_id : uuid
+  user_id : uuid (unique)
+  balance : numeric
+  currency : varchar
+  updated_at : timestamp
+}
+
+entity "portfolios" as portfolios << (P,#F7D9E9) >> {
+  * portfolio_id : uuid
+  user_id : uuid (unique)
+  created_at : timestamp
+  last_updated : timestamp
+}
+
+entity "portfolio_holdings" as portfolio_holdings << (H,#F6E7B4) >> {
+  * holding_id : uuid
+  portfolio_id : uuid
+  asset_id : uuid
+  quantity : numeric
+  average_price : numeric
+  created_at : timestamp
+}
+
+entity "assets" as assets << (A,#CFE3FF) >> {
+  * asset_id : uuid
+  asset_type : varchar
+  symbol : varchar
+  name : varchar
+  current_price : numeric
+  updated_at : timestamp
+  change_percent : numeric
+}
+
+entity "transactions" as transactions << (T,#FFD9D9) >> {
+  * transaction_id : uuid
+  user_id : uuid
+  wallet_id : uuid
+  asset_id : uuid
+  transaction_type : varchar
+  amount : numeric
+  quantity : numeric
+  status : varchar
+  created_at : timestamp
+}
+
+entity "leaderboard" as leaderboard << (L,#E6E6FA) >> {
+  * leaderboard_id : uuid
+  user_id : uuid
+  points_total : integer
+  rank : integer
+  badge : text
+}
+
+entity "admins" as admins << (AD,#E6F7FF) >> {
+  * admin_id : uuid
+  name : varchar
+  email : varchar (unique)
+  password_hash : varchar
+  role : varchar
+  created_at : timestamp
+  supabase_user_id : uuid
+  is_active : boolean
+  updated_at : timestamp
+}
+
+entity "admin_log" as admin_log << (AL,#FFF2CC) >> {
+  * id : bigint
+  admin_id : uuid
+  email : varchar
+  event : varchar
+  ip_address : inet
+  user_agent : text
+  metadata : jsonb
+  timestamp : timestamptz
+}
+
+entity "admin_audit_log" as admin_audit_log << (AA,#FFEFE6) >> {
+  * log_id : uuid
+  admin_id : uuid
+  action : varchar
+  details : text
+  timestamp : timestamp
+}
+
+entity "trigger_errors" as trigger_errors << (TE,#F0F0F0) >> {
+  * id : uuid
+  trigger_name : text
+  payload : jsonb
+  error_message : text
+  created_at : timestamptz
+}
+
+' Layout hints to get a nicer diagram
+users -down-> wallets
+users -right-> portfolios
+portfolios -right-> portfolio_holdings
+portfolio_holdings -right-> assets
+
+users -down-> transactions
+wallets -right-> transactions
+assets -down-> transactions
+
+users -right-> leaderboard
+admins -right-> admin_log
+admins -down-> admin_audit_log
+
+' Relationship lines with crow's-foot style text
+users ||--o{ wallets : "1:1 owns >"
+users ||--o{ portfolios : "1:1 owns >"
+portfolios ||--o{ portfolio_holdings : "1:M contains >"
+assets ||--o{ portfolio_holdings : "1:M is held in >"
+users ||--o{ transactions : "1:M makes >"
+wallets ||--o{ transactions : "1:M used by >"
+assets ||--o{ transactions : "1:M referenced in >"
+users ||--o{ leaderboard : "1:1/entry >"
+admins ||--o{ admin_log : "1:M logs >"
+admins ||--o{ admin_audit_log : "1:M audits >"
+
+' Add small relationship diamonds as notes to mimic original visual style
+note on link
+  <b>FKs</b>
+  wallets.user_id → users.user_id
+  portfolios.user_id → users.user_id
+  portfolio_holdings.portfolio_id → portfolios.portfolio_id
+  portfolio_holdings.asset_id → assets.asset_id
+  transactions.user_id → users.user_id
+  transactions.wallet_id → wallets.wallet_id
+  transactions.asset_id → assets.asset_id
+  admin_log.admin_id → admins.admin_id
+  admin_audit_log.admin_id → admins.admin_id
+end note
+
+' Legend
+legend right
+  |= Color | Meaning |
+  |#9CC3E6| Users |
+  |#BEE7D1| Wallets |
+  |#F7D9E9| Portfolios |
+  |#CFE3FF| Assets |
+endlegend
+
+@enduml

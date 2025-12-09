@@ -1,0 +1,121 @@
+@startuml
+
+' ---- TRANSPARENT BACKGROUND & CLEAN LOOK ----
+skinparam backgroundColor transparent
+skinparam shadowing false
+skinparam dpi 300
+skinparam roundCorner 15
+skinparam defaultTextAlignment left
+
+' Note: Simplified domain model for documentation (not runnable code).
+
+class User {
+  +UUID userId
+  +String name
+  +String email
+  +String passwordHash
+  +String phone
+  +Date birthdate
+  +String status
+  +String pinHash
+  +Date createdAt
+}
+
+class Wallet {
+  +UUID walletId
+  +UUID userId
+  +Decimal balance
+  +String currency
+  +Date updatedAt
+}
+
+class Portfolio {
+  +UUID portfolioId
+  +UUID userId
+  +Date createdAt
+  +Date lastUpdated
+}
+
+class PortfolioHolding {
+  +UUID holdingId
+  +UUID portfolioId
+  +UUID assetId
+  +Decimal quantity
+  +Decimal averagePrice
+  +Date createdAt
+}
+
+class Asset {
+  +UUID assetId
+  +String assetType
+  +String symbol
+  +String name
+  +Decimal currentPrice
+  +Decimal changePercent
+  +Date updatedAt
+}
+
+class Transaction {
+  +UUID transactionId
+  +UUID userId
+  +UUID walletId
+  +UUID assetId (nullable)
+  +String transactionType
+  +Decimal amount
+  +Decimal quantity (nullable)
+  +String status
+  +Date createdAt
+}
+
+class Leaderboard {
+  +UUID leaderboardId
+  +UUID userId
+  +Integer pointsTotal
+  +Integer rank
+  +String badge
+}
+
+class Admin {
+  +UUID adminId
+  +String name
+  +String email
+  +String passwordHash
+  +String role
+  +UUID supabaseUserId
+  +Bool isActive
+  +Date createdAt
+  +Date updatedAt
+}
+
+class AdminLog {
+  +BigInt id
+  +UUID adminId
+  +String email
+  +String event
+  +Inet ipAddress
+  +String userAgent
+  +Json metadata
+  +Date timestamp
+}
+
+class AdminAuditLog {
+  +UUID logId
+  +UUID adminId
+  +String action
+  +String details
+  +Date timestamp
+}
+
+' Relationships
+User "1" -- "1" Wallet : owns >
+User "1" -- "1" Portfolio : owns >
+Portfolio "1" -- "*" PortfolioHolding : contains >
+Asset "1" -- "*" PortfolioHolding : is >
+User "1" -- "*" Transaction : initiates >
+Wallet "1" -- "*" Transaction : uses >
+Asset "1" -- "*" Transaction : references >
+User "1" -- "*" Leaderboard : scores >
+Admin "1" -- "*" AdminLog : logs >
+Admin "1" -- "*" AdminAuditLog : audits >
+
+@enduml

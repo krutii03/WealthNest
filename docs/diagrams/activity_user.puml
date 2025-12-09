@@ -1,0 +1,41 @@
+
+@startuml
+' Minimal User Activity Diagram for WealthNest
+skinparam backgroundColor transparent
+skinparam dpi 300
+skinparam roundCorner 8
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+start
+:Open App / Home Page;
+
+if (Logged in?) then (no)
+  :Register / Sign Up\n(Email verification);
+  :Login;
+endif
+
+:View Dashboard;
+
+fork
+  :View Portfolio & Holdings;
+fork again
+  :Use Calculators / Chatbot;
+end fork
+
+if (Wants to Trade?) then (yes)
+  :Select Buy/Sell or MF Invest;
+  :Enter PIN;
+  if (PIN Valid?) then (yes)
+    :Process Transaction\n(simulated);
+    :Update Wallet & Portfolio;
+    :Show Success Message;
+  else (no)
+    :Reject Transaction;
+  endif
+endif
+
+:View Leaderboard / Export CSV;
+stop
+
+@enduml

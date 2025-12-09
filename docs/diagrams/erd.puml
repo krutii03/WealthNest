@@ -1,0 +1,189 @@
+@startuml
+' WealthNest ERD (transparent background)
+' Primary keys marked with "*" prefix.
+' Save as erd_wealthnest.puml and render with PlantUML.
+
+skinparam backgroundColor transparent
+skinparam dpi 300
+skinparam roundCorner 6
+skinparam shadowing false
+skinparam defaultTextAlignment left
+
+' --------- ENTITIES (tables) ---------
+
+entity "users" as users {
+  * user_id : uuid
+  --
+  name : varchar
+  email : varchar (unique)
+  phone : varchar
+  password_hash : varchar
+  birthdate : date
+  address : text
+  created_at : timestamp
+  status : varchar
+  pin : bigint    ' consider storing hashed PIN in real system
+}
+
+entity "admins" as admins {
+  * admin_id : uuid
+  --
+  name : varchar
+  email : varchar (unique)
+  password_hash : varchar
+  role : varchar  ' enum: superadmin, employee
+  created_at : timestamp
+  supabase_user_id : uuid
+  is_active : boolean
+  updated_at : timestamp
+}
+
+entity "admin_log" as admin_log {
+  * id : bigint
+  --
+  admin_id : uuid
+  email : varchar
+  event : varchar  ' enum: login_success, login_failed, logout, action_performed
+  ip_address : inet
+  user_agent : text
+  metadata : jsonb
+  timestamp : timestamptz
+}
+
+entity "admin_audit_log" as admin_audit_log {
+  * log_id : uuid
+  --
+  admin_id : uuid
+  action : varchar
+  details : text
+  timestamp : timestamp
+}
+
+entity "assets" as assets {
+  * asset_id : uuid
+  --
+  asset_type : varchar   ' enum: stock, mutual_fund, bond, crypto
+  symbol : varchar
+  name : varchar
+  current_price : numeric
+  updated_at : timestamp
+  change_percent : numeric
+}
+
+entity "portfolios" as portfolios {
+  * portfolio_id : uuid
+  --
+  user_id : uuid  (unique)
+  created_at : timestamp
+  last_updated : timestamp
+}
+
+entity "portfolio_holdings" as portfolio_holdings {
+  * holding_id : uuid
+  --
+  portfolio_id : uuid
+  asset_id : uuid
+  quantity : numeric
+  average_price : numeric
+  created_at : timestamp
+}
+
+entity "wallets" as wallets {
+  * wallet_id : uuid
+  --
+  user_id : uuid  (unique)
+  balance : numeric
+  currency : varchar
+  updated_at : timestamp
+}
+
+entity "transactions" as transactions {
+  * transaction_id : uuid
+  --
+  user_id : uuid
+  wallet_id : uuid
+  asset_id : uuid
+  transaction_type : varchar  ' enum: buy, sell, deposit, withdraw
+  amount : numeric
+  quantity : numeric
+  status : varchar  ' enum: pending, completed, failed
+  created_at : timestamp
+}
+
+entity "leaderboard" as leaderboard {
+  * leaderboard_id : uuid
+  --
+  user_id : uuid
+  points_total : integer
+  rank : integer
+  badge : text
+}
+
+entity "trigger_errors" as trigger_errors {
+  * id : uuid
+  --
+  trigger_name : text
+  payload : jsonb
+  error_message : text
+  created_at : timestamptz
+}
+
+' --------- RELATIONSHIPS (FKs & cardinalities) ---------
+' Notation: || = one, }| = many (crow's foot style)
+
+' users 1 --- 1 wallets
+users ||--|| wallets : "has >"
+' users 1 --- 1 portfolios
+users ||--|| portfolios : "has >"
+' portfolios 1 --- * portfolio_holdings
+portfolios ||--o{ portfolio_holdings : "contains >"
+' assets 1 --- * portfolio_holdings
+assets ||--o{ portfolio_holdings : "is held in >"
+' users 1 --- * transactions
+users ||--o{ transactions : "makes >"
+' wallets 1 --- * transactions
+wallets ||--o{ transactions : "used by >"
+' assets 1 --- * transactions (nullable for deposit/withdraw)
+assets ||--o{ transactions : "referenced in >"
+' users 1 --- * leaderboard (usually 1-to-1 but modeled as entry)
+users ||--o{ leaderboard : "scores >"
+' admins 1 --- * admin_log
+admins ||--o{ admin_log : "logs >"
+' admins 1 --- * admin_audit_log
+admins ||--o{ admin_audit_log : "audits >"
+
+' Explicit FK annotations (for clarity)
+note left of wallets
+  FK: wallets.user_id -> users.user_id
+end note
+
+note left of portfolios
+  FK: portfolios.user_id -> users.user_id
+end note
+
+note left of portfolio_holdings
+  FK: portfolio_holdings.portfolio_id -> portfolios.portfolio_id
+  FK: portfolio_holdings.asset_id -> assets.asset_id
+end note
+
+note left of transactions
+  FK: transactions.user_id -> users.user_id
+  FK: transactions.wallet_id -> wallets.wallet_id
+  FK: transactions.asset_id -> assets.asset_id (nullable)
+end note
+
+note left of admin_log
+  FK: admin_log.admin_id -> admins.admin_id
+end note
+
+note left of admin_audit_log
+  FK: admin_audit_log.admin_id -> admins.admin_id
+end note
+
+' --------- Styling / Legend ---------
+legend right
+  |* Primary Key (PK) marked with "*"|
+  |All attributes listed per table|
+endlegend
+
+@enduml

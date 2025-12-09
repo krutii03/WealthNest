@@ -1,0 +1,43 @@
+
+@startuml
+' Minimal Sequence Diagram - User Login and Buy Flow (transparent)
+skinparam backgroundColor transparent
+skinparam dpi 300
+skinparam roundCorner 8
+skinparam shadowing false
+
+actor User
+participant Frontend as "Frontend (React)"
+participant Auth as "Supabase Auth"
+participant API as "Express API"
+participant Wallet as "Wallet Service / DB"
+participant Asset as "Asset Service / DB"
+participant Transaction as "Transactions DB"
+participant PriceFeed as "Market Price API"
+
+User -> Frontend : Open App / Click Login
+Frontend -> Auth : Authenticate (email/password)
+Auth --> Frontend : JWT Token
+Frontend -> API : GET /dashboard (Bearer token)
+API -> Wallet : Fetch wallet balance (user_id)
+API -> Asset : Fetch holdings + current prices
+Asset -> PriceFeed : Request current price (if needed)
+PriceFeed --> Asset : Price data
+Asset --> API : Holdings + prices
+Wallet --> API : Balance data
+API --> Frontend : Dashboard payload (portfolio, balance, 24h change)
+
+User -> Frontend : Place Buy Order (symbol, qty)
+Frontend -> API : POST /transactions/buy (order, token, PIN)
+API -> Auth : Verify token & user
+API -> Wallet : Check & reserve funds
+API -> Asset : Get current price
+Asset -> PriceFeed : Get latest price
+PriceFeed --> Asset : Price
+API -> Transaction : Create transaction (pending)
+API -> Wallet : Deduct amount (atomic)
+Transaction --> API : status updated (completed)
+API --> Frontend : Order confirmation (completed)
+Frontend -> User : Show success message / update UI
+
+@enduml

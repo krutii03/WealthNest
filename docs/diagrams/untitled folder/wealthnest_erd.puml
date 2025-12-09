@@ -1,0 +1,186 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 @startuml\
+' WealthNest ERD (based on uploaded spec)\
+' Render with PlantUML (entity notation)\
+\
+skinparam linetype ortho\
+\
+entity "Users" as Users \{\
+  * user_id : INT\
+  --\
+  name : VARCHAR(100)\
+  email : VARCHAR(150)\
+  phone : VARCHAR(15)\
+  password_hash : VARCHAR(255)\
+  birthdate : DATE\
+  address : TEXT\
+  photo_url : VARCHAR(255)\
+  created_at : DATETIME\
+  status : ENUM\
+\}\
+\
+entity "Wallets" as Wallets \{\
+  * wallet_id : INT\
+  --\
+  user_id : INT  <<FK>>\
+  balance : DECIMAL(12,2)\
+  currency : VARCHAR(10)\
+  updated_at : DATETIME\
+\}\
+\
+entity "Assets" as Assets \{\
+  * asset_id : INT\
+  --\
+  asset_type : ENUM\
+  symbol : VARCHAR(20)\
+  name : VARCHAR(100)\
+  current_price : DECIMAL(12,2)\
+  updated_at : DATETIME\
+\}\
+\
+entity "Portfolios" as Portfolios \{\
+  * portfolio_id : INT\
+  --\
+  user_id : INT  <<FK>>\
+  created_at : DATETIME\
+  last_updated : DATETIME\
+\}\
+\
+entity "Portfolio_Holdings" as Holdings \{\
+  * holding_id : INT\
+  --\
+  portfolio_id : INT  <<FK>>\
+  asset_id : INT      <<FK>>\
+  quantity : DECIMAL(12,4)\
+  average_price : DECIMAL(12,2)\
+  created_at : DATETIME\
+\}\
+\
+entity "Transactions" as Transactions \{\
+  * transaction_id : INT\
+  --\
+  user_id : INT   <<FK>>\
+  wallet_id : INT <<FK>>\
+  asset_id : INT  <<FK, nullable>>\
+  transaction_type : ENUM\
+  amount : DECIMAL(12,2)\
+  quantity : DECIMAL(12,4) <<nullable>>\
+  status : ENUM\
+  created_at : DATETIME\
+\}\
+\
+entity "Payment_Methods" as PaymentMethods \{\
+  * method_id : INT\
+  --\
+  user_id : INT  <<FK>>\
+  type : ENUM\
+  masked_details : VARCHAR(100)\
+  created_at : DATETIME\
+\}\
+\
+entity "OTP_Log" as OTPLog \{\
+  * otp_id : INT\
+  --\
+  user_id : INT  <<FK>>\
+  otp_code : VARCHAR(255)\
+  purpose : ENUM\
+  expires_at : DATETIME\
+  used : BOOLEAN\
+\}\
+\
+entity "Achievements" as Achievements \{\
+  * achievement_id : INT\
+  --\
+  title : VARCHAR(100)\
+  description : TEXT\
+  points : INT\
+\}\
+\
+entity "User_Achievements" as UserAchievements \{\
+  * user_achievement_id : INT\
+  --\
+  user_id : INT         <<FK>>\
+  achievement_id : INT  <<FK>>\
+  earned_at : DATETIME\
+\}\
+\
+entity "Leaderboard" as Leaderboard \{\
+  * leaderboard_id : INT\
+  --\
+  user_id : INT  <<FK>>\
+  points_total : INT\
+  rank : INT\
+\}\
+\
+entity "Feedback" as Feedback \{\
+  * feedback_id : INT\
+  --\
+  user_id : INT  <<FK>>\
+  message : TEXT\
+  status : ENUM\
+  created_at : DATETIME\
+\}\
+\
+entity "Admins" as Admins \{\
+  * admin_id : INT\
+  --\
+  name : VARCHAR(100)\
+  email : VARCHAR(150)\
+  password_hash : VARCHAR(255)\
+  role : ENUM\
+  created_at : DATETIME\
+\}\
+\
+entity "Admin_Audit_Log" as AdminAudit \{\
+  * log_id : INT\
+  --\
+  admin_id : INT  <<FK>>\
+  action : VARCHAR(100)\
+  details : TEXT\
+  timestamp : DATETIME\
+\}\
+\
+entity "System_Financials" as SystemFinancials \{\
+  * record_id : INT\
+  --\
+  total_client_funds : DECIMAL(14,2)\
+  last_updated : DATETIME\
+\}\
+\
+entity "Client_Fund_Ledger" as ClientFundLedger \{\
+  * ledger_id : INT\
+  --\
+  user_id : INT          <<FK>>\
+  transaction_id : INT   <<FK>>\
+  entry_type : ENUM\
+  amount : DECIMAL(12,2)\
+  balance_after : DECIMAL(12,2)\
+  fund_account_balance : DECIMAL(14,2)\
+  timestamp : DATETIME\
+\}\
+\
+' Relationships (crow's-foot style)\
+Users ||--o\{ Wallets : "owns"\
+Users ||--o\{ Portfolios : "has"\
+Portfolios ||--o\{ Holdings : "contains"\
+Assets ||--o\{ Holdings : "referenced by"\
+Users ||--o\{ Transactions : "initiates"\
+Wallets ||--o\{ Transactions : "used in"\
+Assets ||--o\{ Transactions : "optional asset"\
+Users ||--o\{ PaymentMethods : "adds"\
+Users ||--o\{ OTPLog : "receives"\
+Users ||--o\{ UserAchievements : "earns"\
+Achievements ||--o\{ UserAchievements : "grants"\
+Users ||--o\{ Leaderboard : "appears on"\
+Users ||--o\{ Feedback : "submits"\
+Admins ||--o\{ AdminAudit : "records"\
+Transactions ||--o\{ ClientFundLedger : "backs"\
+Users ||--o\{ ClientFundLedger : "has ledger entries"\
+\
+@enduml}

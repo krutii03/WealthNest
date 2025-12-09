@@ -1,0 +1,90 @@
+@startuml
+' CRC Cards - User & Investment Components
+skinparam backgroundColor transparent
+skinparam dpi 300
+skinparam roundCorner 6
+skinparam shadowing false
+skinparam defaultTextAlignment left
+skinparam classFontSize 10
+skinparam classAttributeIconSize 0
+skinparam maxMessageSize 60
+skinparam wrapWidth 200
+left to right direction
+
+' ----------------- ROW 1 (User structure & holdings) -----------------
+class users {
+  == Responsibilities ==
+  - User profile & auth
+  - Track status & metadata
+  == Collaborators ==
+  - wallets, portfolios
+  - transactions, leaderboard
+}
+
+class wallets {
+  == Responsibilities ==
+  - Maintain balance
+  - Track currency (INR)
+  - Deposit/withdraw ops
+  == Collaborators ==
+  - users, transactions
+}
+
+class portfolios {
+  == Responsibilities ==
+  - One per user (unique)
+  - Track updates
+  - Aggregate holdings
+  == Collaborators ==
+  - users, portfolio_holdings
+}
+
+class portfolio_holdings {
+  == Responsibilities ==
+  - Store asset, qty, avg_price
+  - Link to assets
+  == Collaborators ==
+  - portfolios, assets
+}
+
+' ----------------- ROW 2 (Market assets & operations) -----------------
+class assets {
+  == Responsibilities ==
+  - Store asset_type, symbol
+  - Maintain price & change%
+  == Collaborators ==
+  - portfolio_holdings
+  - transactions
+}
+
+class transactions {
+  == Responsibilities ==
+  - Record buy/sell/deposit/withdraw
+  - Track amount, qty, status
+  == Collaborators ==
+  - users, wallets, assets
+}
+
+class leaderboard {
+  == Responsibilities ==
+  - Calculate points
+  - Assign rank & badge
+  == Collaborators ==
+  - users
+}
+
+' Layout: Row 1 horizontal connections with spacing
+users -[hidden]right- wallets
+wallets -[hidden]right- portfolios
+portfolios -[hidden]right- portfolio_holdings
+
+' Layout: Row 2 horizontal connections with spacing
+assets -[hidden]right- transactions
+transactions -[hidden]right- leaderboard
+
+' Layout: Vertical separation between rows
+portfolio_holdings -[hidden]down- assets
+wallets -[hidden]down- transactions
+
+@enduml
+

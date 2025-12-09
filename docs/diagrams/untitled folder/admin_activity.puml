@@ -1,0 +1,31 @@
+@startuml
+title WealthNest — Admin Activity Flow (simple)
+
+start
+
+:Open Admin Panel;
+:Enter admin credentials;
+if (Credentials valid?) then (yes)
+  :Create admin session;
+  :Show Admin Dashboard;
+else (no)
+  :Show access denied;
+  stop
+endif
+
+:View Users;
+:View Transactions and Ledgers;
+if (Suspicious activity?) then (yes)
+  :Flag user / Flag transaction;
+  :Click "Ban User" or "Suspend";
+  :Update users.status = banned;
+  :Insert Admin_Audit_Log;
+  :Notify user (optional);
+else (no)
+  :Resolve disputes / Reconcile transactions;
+endif
+
+:Run reports / export reconciliation data;
+:Review Admin_Audit_Log;
+stop
+@enduml

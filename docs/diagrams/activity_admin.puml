@@ -1,0 +1,28 @@
+
+@startuml
+' Minimal Admin Activity Diagram for WealthNest
+skinparam backgroundColor transparent
+skinparam dpi 300
+skinparam roundCorner 8
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+start
+:Admin Login;
+
+:View Admin Dashboard;
+
+if (Manage Users?) then (yes)
+  :Search / Ban / Unban Users;
+endif
+
+if (Manage Assets?) then (yes)
+  :Create / Edit / Delete Assets;
+endif
+
+:View Transactions;
+
+:View Reports & Audit Logs;
+
+stop
+@enduml

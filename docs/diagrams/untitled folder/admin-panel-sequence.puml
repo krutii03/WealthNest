@@ -1,0 +1,53 @@
+@startuml WealthNest_AdminPanel_Simple
+title WealthNest — Admin Panel 
+
+actor Admin
+participant "Admin UI" as AUI
+participant "Auth Service (Supabase)" as Auth
+database "Postgres DB" as DB
+participant "Notification Service" as Notif
+
+== Admin Login ==
+Admin -> AUI : Enter admin credentials
+AUI -> Auth : Authenticate admin
+Auth -> DB : Verify admin role
+DB --> Auth : role confirmed
+Auth --> AUI : Return admin session
+AUI --> Admin : Show admin dashboard
+
+== View Users ==
+Admin -> AUI : Click "Users"
+AUI -> DB : Request user list
+DB --> AUI : Return users
+AUI --> Admin : Show users table
+
+== Ban / Unban User ==
+Admin -> AUI : Click "Ban user"
+AUI -> DB : Update users.status = banned
+DB --> AUI : Confirm update
+AUI -> DB : Insert Admin_Audit_Log (action=ban)
+DB --> AUI : Audit saved
+AUI -> Notif : Send notification to user
+Notif --> User : "Account suspended" (optional)
+
+== Manage Assets ==
+Admin -> AUI : Click "Assets"
+AUI -> DB : Request assets list
+DB --> AUI : Return assets
+Admin -> AUI : Update asset price or add asset
+AUI -> DB : Insert/Update assets table
+DB --> AUI : Confirm
+
+== View Reports / Reconcile ==
+Admin -> AUI : Click "Reports"
+AUI -> DB : Query transactions, ledger, system_financials
+DB --> AUI : Return report data
+AUI --> Admin : Show reports and reconciliation info
+
+== View Audit Logs ==
+Admin -> AUI : Click "Audit Logs"
+AUI -> DB : Request Admin_Audit_Log
+DB --> AUI : Return logs
+AUI --> Admin : Show audit timeline
+
+@enduml

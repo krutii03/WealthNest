@@ -1,0 +1,40 @@
+@startuml
+title WealthNest — User Activity Flow 
+start
+
+:Open App;
+if (New user?) then (yes)
+  :Signup (email, password);
+  :Verify email;
+else (no)
+  :Login (credentials);
+endif
+
+:Show Dashboard;
+
+fork
+  :View Wallet\n(balance, ledger);
+fork again
+  :Deposit Funds;
+  if (Payment ok?) then (yes)
+    :Update wallet & ledger;
+  else (no)
+    :Show failed;
+  endif
+end fork
+
+:Buy Asset (stock / MF);
+if (Sufficient balance?) then (yes)
+  :Create buy;
+  :Update holdings & wallet;
+  :Notify user;
+else (no)
+  :Show "Insufficient funds";
+endif
+
+:View Portfolio (holdings, P&L);
+:View Activity (history);
+
+:Logout;
+stop
+@enduml

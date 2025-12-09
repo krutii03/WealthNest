@@ -1,0 +1,40 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 cat > admin_activity.puml <<'EOF'\
+@startuml\
+title WealthNest \'97 Admin Activity Flow\
+\
+start\
+\
+:Open Admin Panel;\
+:Enter admin credentials;\
+if (Credentials valid?) then (yes)\
+  :Create admin session;\
+  :Show Admin Dashboard;\
+else (no)\
+  :Show access denied;\
+  stop\
+endif\
+\
+:View Users;\
+:View Transactions and Ledgers;\
+if (Suspicious activity?) then (yes)\
+  :Flag user / Flag transaction;\
+  :Click "Ban User" or "Suspend";\
+  :Update users.status = banned;\
+  :Insert Admin_Audit_Log;\
+  :Notify user (optional);\
+else (no)\
+  :Resolve disputes / Reconcile transactions;\
+endif\
+\
+:Run reports / export reconciliation data;\
+:Review Admin_Audit_Log;\
+stop\
+@enduml\
+EOF}

@@ -1,0 +1,71 @@
+@startuml
+'  Use Case diagram for WealthNest 
+' Save as usecase_minimal.puml and render with PlantUML
+
+' ---- Appearance ----
+skinparam backgroundColor transparent
+skinparam dpi 300
+skinparam roundCorner 8
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+' ---- Actors ----
+actor "User" as User
+actor "Admin" as Admin
+
+' ---- Layout & Boundary ----
+left to right direction
+package "WealthNest System" {
+
+  'User Use Cases ---
+  usecase "Register / Sign Up\n(Email verification)" as UC_Register
+  usecase "Login (User)" as UC_Login
+  usecase "View Dashboard\n(Portfolio, 24h change,\nWallet overview)" as UC_Dashboard
+  usecase "View Portfolio\n(Holdings & P/L)" as UC_Portfolio
+  usecase "Buy / Sell Stocks\n(Requires PIN)" as UC_BuySell
+  usecase "Invest in Mutual Fund\n(SIP / Lumpsum)" as UC_MF
+  usecase "Deposit / Withdraw\n(simulation)" as UC_Wallet
+  usecase "Transactions\n(Recent history)" as UC_Transactions
+  usecase "Calculators\n(SIP / Goal)" as UC_Calculators
+  usecase "Chatbot / FAQ" as UC_Chatbot
+
+  ' --- Admin Use Cases ---
+  usecase "Admin Login" as UC_AdminLogin
+  usecase "Manage Users & Admins\n(search, ban, create admin)" as UC_ManageUsers
+  usecase "Manage Assets\n(create / update / delete)" as UC_ManageAssets
+  usecase "View Transactions" as UC_ViewTransactions
+  usecase "Reports & Audit Logs" as UC_Reports
+
+}
+
+' ---- User relations (compact) ----
+User --> UC_Register
+User --> UC_Login
+User --> UC_Dashboard
+User --> UC_Portfolio
+User --> UC_BuySell
+User --> UC_MF
+User --> UC_Wallet
+User --> UC_Transactions
+User --> UC_Calculators
+User --> UC_Chatbot
+
+' PIN included for trading/investments (PIN requirement noted in use case name)
+
+' ---- Admin relations ----
+Admin --> UC_AdminLogin
+Admin --> UC_ManageUsers
+Admin --> UC_ManageAssets
+Admin --> UC_ViewTransactions
+Admin --> UC_Reports
+
+' ---- Notes ----
+note left of UC_Calculators
+  Compact: SIP and Goal calculators included.
+end note
+
+note right of UC_Wallet
+  Wallet ops are simulated (no real payments).
+end note
+
+@enduml

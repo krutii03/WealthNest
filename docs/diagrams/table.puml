@@ -1,0 +1,152 @@
+@startuml
+' WealthNest - Database Tables (PlantUML)
+' Primary keys prefixed with "*" in each entity
+skinparam backgroundColor transparent
+skinparam dpi 300
+skinparam roundCorner 6
+skinparam shadowing false
+skinparam defaultTextAlignment left
+left to right direction
+
+' ---------- USERS ----------
+entity "users" as users {
+  * user_id : UUID
+  --
+  name : VARCHAR(100)
+  email : VARCHAR(150)
+  phone : VARCHAR(15)
+  password_hash : VARCHAR(255)
+  birthdate : DATE
+  address : TEXT
+  photo_url : VARCHAR(255)
+  created_at : TIMESTAMP
+  status : VARCHAR(50)
+  pin : BIGINT
+}
+
+' ---------- WALLETS ----------
+entity "wallets" as wallets {
+  * wallet_id : UUID
+  --
+  user_id : UUID
+  balance : NUMERIC
+  currency : VARCHAR(10)
+  updated_at : TIMESTAMP
+}
+
+' ---------- PORTFOLIOS ----------
+entity "portfolios" as portfolios {
+  * portfolio_id : UUID
+  --
+  user_id : UUID
+  created_at : TIMESTAMP
+  last_updated : TIMESTAMP
+}
+
+' ---------- PORTFOLIO_HOLDINGS ----------
+entity "portfolio_holdings" as portfolio_holdings {
+  * holding_id : UUID
+  --
+  portfolio_id : UUID
+  asset_id : UUID
+  quantity : NUMERIC
+  average_price : NUMERIC
+  created_at : TIMESTAMP
+}
+
+' ---------- ASSETS ----------
+entity "assets" as assets {
+  * asset_id : UUID
+  --
+  asset_type : VARCHAR(50)
+  symbol : VARCHAR(50)
+  name : VARCHAR(200)
+  current_price : NUMERIC
+  updated_at : TIMESTAMP
+  change_percent : NUMERIC
+}
+
+' ---------- TRANSACTIONS ----------
+entity "transactions" as transactions {
+  * transaction_id : UUID
+  --
+  user_id : UUID
+  wallet_id : UUID
+  asset_id : UUID
+  transaction_type : VARCHAR(50)
+  amount : NUMERIC
+  quantity : NUMERIC
+  status : VARCHAR(50)
+  created_at : TIMESTAMP
+}
+
+' ---------- LEADERBOARD ----------
+entity "leaderboard" as leaderboard {
+  * leaderboard_id : UUID
+  --
+  user_id : UUID
+  points_total : INTEGER
+  rank : INTEGER
+  badge : TEXT
+}
+
+' ---------- ADMINS ----------
+entity "admins" as admins {
+  * admin_id : UUID
+  --
+  name : VARCHAR(150)
+  email : VARCHAR(150)
+  password_hash : VARCHAR(255)
+  role : VARCHAR(50)
+  created_at : TIMESTAMP
+  supabase_user_id : UUID
+  is_active : BOOLEAN
+  updated_at : TIMESTAMP
+}
+
+' ---------- ADMIN_LOG ----------
+entity "admin_log" as admin_log {
+  * id : BIGINT
+  --
+  admin_id : UUID
+  email : VARCHAR(150)
+  event : VARCHAR(100)
+  ip_address : INET
+  user_agent : TEXT
+  metadata : JSONB
+  timestamp : TIMESTAMPTZ
+}
+
+' ---------- ADMIN_AUDIT_LOG ----------
+entity "admin_audit_log" as admin_audit_log {
+  * log_id : UUID
+  --
+  admin_id : UUID
+  action : VARCHAR(100)
+  details : TEXT
+  timestamp : TIMESTAMP
+}
+
+' ---------- TRIGGER_ERRORS ----------
+entity "trigger_errors" as trigger_errors {
+  * id : UUID
+  --
+  trigger_name : TEXT
+  payload : JSONB
+  error_message : TEXT
+  created_at : TIMESTAMPTZ
+}
+
+' ---------- RELATIONSHIPS (FKs) ----------
+users ||--|| wallets : "user_id -> user_id (1:1)"
+users ||--|| portfolios : "user_id -> user_id (1:1)"
+portfolios ||--o{ portfolio_holdings : "portfolio_id -> portfolio_id (1:M)"
+assets ||--o{ portfolio_holdings : "asset_id -> asset_id (1:M)"
+users ||--o{ transactions : "user_id -> user_id (1:M)"
+wallets ||--o{ transactions : "wallet_id -> wallet_id (1:M)"
+assets ||--o{ transactions : "asset_id -> asset_id (1:M, nullable)"
+users ||--o{ leaderboard : "user_id -> user_id (1:1/entry)"
+admins ||--o{ admin_log : "admin_id -> admin_id (1:M)"
+admins ||--o{ admin_audit_log : "admin_id -> admin_id (1:M)"
+
+@enduml

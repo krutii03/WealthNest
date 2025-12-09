@@ -1,0 +1,108 @@
+@startuml
+' CRC-style cards for WealthNest (3 rows × 3 cards) - clean & compact
+skinparam backgroundColor transparent
+skinparam dpi 300
+skinparam roundCorner 6
+skinparam shadowing false
+skinparam defaultTextAlignment left
+skinparam classFontSize 11
+skinparam classAttributeIconSize 0
+
+' ----------------- ROW 1 (User-facing) -----------------
+class User {
+  == Responsibilities ==
+  - Register / Login
+  - Update profile
+  - Dashboard & portfolio view
+  - Trade: buy/sell, MF invest
+  - Wallet actions (simulation)
+  == Collaborators ==
+  - Wallet, Portfolio, Transaction
+  - Asset, Leaderboard
+}
+
+class Wallet {
+  == Responsibilities ==
+  - Maintain balance
+  - Simulated deposit/withdraw
+  - Provide wallet data to UI
+  == Collaborators ==
+  - User, Transaction
+}
+
+class Portfolio {
+  == Responsibilities ==
+  - Track holdings & quantities
+  - Calculate P&L
+  - Provide 90-day chart data
+  == Collaborators ==
+  - User, PortfolioHolding, Asset
+}
+
+' ----------------- ROW 2 (Core investment logic) -----------------
+class PortfolioHolding {
+  == Responsibilities ==
+  - Store asset, qty, avg price
+  - Update on buy/sell
+  == Collaborators ==
+  - Portfolio, Asset, Transaction
+}
+
+class Asset {
+  == Responsibilities ==
+  - Store type, symbol, price
+  - Provide market price values
+  == Collaborators ==
+  - PortfolioHolding, Transaction
+}
+
+class Transaction {
+  == Responsibilities ==
+  - Record buy/sell/deposit/withdraw
+  - Maintain status & audit
+  == Collaborators ==
+  - User, Wallet, Asset
+}
+
+' ----------------- ROW 3 (System management) -----------------
+class Leaderboard {
+  == Responsibilities ==
+  - Calculate points (portfolio/100)
+  - Assign badges & rank
+  == Collaborators ==
+  - User, Portfolio
+}
+
+class Admin {
+  == Responsibilities ==
+  - Manage users, assets, transactions
+  - View reports & audit logs
+  == Collaborators ==
+  - AdminAuditLog
+}
+
+class AdminAuditLog {
+  == Responsibilities ==
+  - Store admin actions
+  - Maintain timestamp + details
+  == Collaborators ==
+  - Admin
+}
+
+' Layout: Row 1 horizontal connections
+User -[hidden]- Wallet
+Wallet -[hidden]- Portfolio
+
+' Layout: Row 2 horizontal connections
+PortfolioHolding -[hidden]- Asset
+Asset -[hidden]- Transaction
+
+' Layout: Row 3 horizontal connections
+Leaderboard -[hidden]- Admin
+Admin -[hidden]- AdminAuditLog
+
+' Layout: Vertical separation between rows
+Portfolio -[hidden]down- PortfolioHolding
+Transaction -[hidden]down- Leaderboard
+
+@enduml
