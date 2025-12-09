@@ -306,8 +306,8 @@ export default function Dashboard() {
       FallbackComponent={ErrorFallback}
       onReset={() => window.location.reload()}
     >
-      <div className="grid grid-cols-12 gap-6">
-        <div className="col-span-12 space-y-6">
+      <div className="grid grid-cols-12 gap-4 sm:gap-6 px-4 sm:px-6 py-4 sm:py-6">
+        <div className="col-span-12 space-y-4 sm:space-y-6">
           <HeroKPI
             portfolioTotal={portfolioTotal}
             walletBalance={walletBalance}
@@ -320,8 +320,8 @@ export default function Dashboard() {
           {loading ? (
             <SkeletonCard />
           ) : (
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6">
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">Portfolio Snapshot</h3>
+            <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6">
+              <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-4">Portfolio Snapshot</h3>
               <ChartPortfolio data={chartData} />
               <div className="mt-4">
                 <PortfolioCard holdings={holdings} />
@@ -329,10 +329,10 @@ export default function Dashboard() {
             </div>
           )}
 
-          <section className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6" aria-label="Recent transactions">
-            <div className="flex items-center justify-between mb-4">
+          <section className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6" aria-label="Recent transactions">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
               <div>
-                <h3 className="text-lg font-semibold text-slate-900">Recent Transactions (90 Days)</h3>
+                <h3 className="text-base sm:text-lg font-semibold text-slate-900">Recent Transactions (90 Days)</h3>
                 <p className="text-xs text-slate-500 mt-1">
                   Showing {transactions.length === 0 ? 0 : startIndex + 1}-{Math.min(endIndex, transactions.length)} of {transactions.length} transaction{transactions.length !== 1 ? 's' : ''}
                 </p>
@@ -345,38 +345,40 @@ export default function Dashboard() {
                 <div className="h-4 w-4/5 bg-slate-100 rounded animate-pulse" />
               </div>
             ) : error ? (
-              <div className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-md p-2" role="alert">
+              <div className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-md p-3" role="alert">
                 {error}
               </div>
             ) : transactions.length === 0 ? (
               <p className="text-sm text-slate-600">No transactions in the last 90 days.</p>
             ) : (
               <>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-slate-200">
-                    <thead className="bg-slate-50">
-                      <tr>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Type</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Amount</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Date</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-slate-200">
-                      {paginatedTransactions.map((t, i) => (
-                        <tr key={i} className="hover:bg-slate-50">
-                          <td className="px-4 py-3 whitespace-nowrap">
-                            <span className={`text-sm font-medium ${
-                              t.transaction_type === 'buy' ? 'text-emerald-600' : 'text-rose-600'
-                            }`}>
-                              {t.transaction_type.toUpperCase()}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3 whitespace-nowrap text-sm text-slate-900">
-                            ₹{(t.amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                          </td>
-                          <td className="px-4 py-3 whitespace-nowrap text-sm text-slate-500">
-                            {t.created_at ? new Date(t.created_at).toLocaleDateString('en-IN', { 
+                {/* Desktop Table View */}
+                <div className="hidden sm:block overflow-x-auto -mx-4 sm:mx-0">
+                  <div className="inline-block min-w-full align-middle px-4 sm:px-0">
+                    <table className="min-w-full divide-y divide-slate-200">
+                      <thead className="bg-slate-50">
+                        <tr>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Type</th>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Amount</th>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Date</th>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-slate-200">
+                        {paginatedTransactions.map((t, i) => (
+                          <tr key={i} className="hover:bg-slate-50">
+                            <td className="px-4 py-3 whitespace-nowrap">
+                              <span className={`text-sm font-medium ${
+                                t.transaction_type === 'buy' ? 'text-emerald-600' : 'text-rose-600'
+                              }`}>
+                                {t.transaction_type.toUpperCase()}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3 whitespace-nowrap text-sm text-slate-900">
+                              ₹{(t.amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </td>
+                            <td className="px-4 py-3 whitespace-nowrap text-sm text-slate-500">
+                              {t.created_at ? new Date(t.created_at).toLocaleDateString('en-IN', { 
                               day: 'numeric', 
                               month: 'short', 
                               year: 'numeric' 
@@ -401,20 +403,60 @@ export default function Dashboard() {
                     </tbody>
                   </table>
                 </div>
+                </div>
+                
+                {/* Mobile Card View */}
+                <div className="sm:hidden space-y-3 mt-2">
+                  {paginatedTransactions.map((t, i) => (
+                    <div key={i} className="bg-slate-50 rounded-lg p-3 border border-slate-200">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex-1">
+                          <div className={`text-sm font-semibold mb-1 ${
+                            t.transaction_type === 'buy' ? 'text-emerald-600' : 'text-rose-600'
+                          }`}>
+                            {t.transaction_type.toUpperCase()}
+                          </div>
+                          <div className="text-xs text-slate-600">
+                            {t.created_at ? new Date(t.created_at).toLocaleDateString('en-IN', { 
+                              day: 'numeric', 
+                              month: 'short', 
+                              year: 'numeric' 
+                            }) : '-'}
+                          </div>
+                        </div>
+                        <span 
+                          className={`text-xs px-2 py-1 rounded-full font-medium flex-shrink-0 ml-2 ${
+                            t.status === 'completed'
+                              ? 'bg-emerald-100 text-emerald-700'
+                              : t.status === 'pending'
+                              ? 'bg-amber-100 text-amber-700'
+                              : 'bg-rose-100 text-rose-700'
+                          }`} 
+                          aria-label={`Status ${t.status}`}
+                        >
+                          {t.status}
+                        </span>
+                      </div>
+                      <div className="text-base font-bold text-slate-900">
+                        ₹{(t.amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
                 
                 {/* Pagination Controls */}
                 {totalPages > 1 && (
-                  <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-200">
-                    <div className="flex items-center gap-2">
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0 mt-4 pt-4 border-t border-slate-200">
+                    <div className="flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start">
                       <button
                         onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                         disabled={currentPage === 1}
-                        className="px-3 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white"
+                        className="flex-1 sm:flex-none px-4 py-2.5 sm:py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg sm:rounded-md hover:bg-slate-50 active:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:active:bg-white touch-manipulation"
                       >
                         Previous
                       </button>
                       
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 flex-1 sm:flex-none justify-center sm:justify-start">
                         {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
                           // Show first page, last page, current page, and pages around current
                           if (
@@ -426,10 +468,10 @@ export default function Dashboard() {
                               <button
                                 key={page}
                                 onClick={() => setCurrentPage(page)}
-                                className={`px-3 py-2 text-sm font-medium rounded-md ${
+                                className={`px-3 sm:px-3 py-2.5 sm:py-2 text-sm font-medium rounded-lg sm:rounded-md touch-manipulation ${
                                   currentPage === page
                                     ? 'bg-sky-600 text-white'
-                                    : 'text-slate-700 bg-white border border-slate-300 hover:bg-slate-50'
+                                    : 'text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 active:bg-slate-100'
                                 }`}
                               >
                                 {page}

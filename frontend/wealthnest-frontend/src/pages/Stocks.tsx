@@ -414,58 +414,59 @@ export default function StocksPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-4">
+    <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-8">
+      <div className="mb-4 sm:mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Stocks</h1>
-            <p className="text-gray-600">Browse and trade stocks</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">Stocks</h1>
+            <p className="text-sm sm:text-base text-gray-600">Browse and trade stocks</p>
           </div>
           {wallet && (
-            <div className="p-4 bg-teal-50 rounded-lg border border-teal-200">
+            <div className="p-3 sm:p-4 bg-teal-50 rounded-lg border border-teal-200 w-full sm:w-auto">
               <p className="text-xs text-gray-600 mb-1">Available Balance</p>
-              <p className="text-2xl font-bold text-teal-600">{formatCurrency(wallet.balance)} {wallet.currency}</p>
+              <p className="text-xl sm:text-2xl font-bold text-teal-600 break-words">{formatCurrency(wallet.balance)} {wallet.currency}</p>
             </div>
           )}
         </div>
         
         <div className="mb-4">
-          <div className="relative max-w-md">
+          <div className="relative w-full sm:max-w-md">
             <input
               type="text"
               placeholder="Search stocks by symbol or name..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-2 pl-10 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 sm:py-2 pl-10 text-base sm:text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent touch-manipulation"
             />
-            <svg className="absolute left-3 top-2.5 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="absolute left-3 top-3 sm:top-2.5 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="overflow-x-auto">
+      <div className="bg-white rounded-xl sm:rounded-lg shadow overflow-hidden">
+        {/* Desktop Table View */}
+        <div className="hidden sm:block overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Symbol
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Name
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Price
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Change %
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Your Holdings
                 </th>
-                <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -473,7 +474,7 @@ export default function StocksPage() {
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredStocks.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={6} className="px-4 sm:px-6 py-8 text-center text-gray-500">
                     {searchQuery ? `No stocks found matching "${searchQuery}"` : 'No stocks available'}
                   </td>
                 </tr>
@@ -485,33 +486,33 @@ export default function StocksPage() {
 
                   return (
                     <tr key={stock.symbol} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                         <span className="font-semibold text-gray-900">{stock.symbol}</span>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-4 sm:px-6 py-4">
                         <span className="text-gray-900">{stock.name || stock.symbol}</span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right">
                         <span className="text-gray-900 font-medium">
                           {formatCurrency(stock.current_price || 0)}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right">
                         {formatChange(stock.change_percent)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right">
                         {ownedQuantity > 0 ? (
                           <span className="text-gray-900 font-medium">{ownedQuantity.toFixed(4)}</span>
                         ) : (
                           <span className="text-gray-400">—</span>
                         )}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-center">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-center">
                         <div className="flex justify-center gap-2">
                           <button
                             onClick={() => handleBuyClick(stock)}
                             disabled={isTradingThis}
-                            className="px-3 py-1.5 text-sm font-medium rounded-lg bg-teal-500 text-white hover:bg-teal-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                            className="px-3 py-1.5 text-sm font-medium rounded-lg bg-teal-500 text-white hover:bg-teal-600 active:bg-teal-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors touch-manipulation"
                           >
                             {isTradingThis && !isSellMode ? 'Processing...' : 'Buy'}
                           </button>
@@ -532,6 +533,66 @@ export default function StocksPage() {
               )}
             </tbody>
           </table>
+        </div>
+        
+        {/* Mobile Card View */}
+        <div className="sm:hidden divide-y divide-gray-200">
+          {filteredStocks.length === 0 ? (
+            <div className="px-4 py-8 text-center text-gray-500 text-sm">
+              {searchQuery ? `No stocks found matching "${searchQuery}"` : 'No stocks available'}
+            </div>
+          ) : (
+            filteredStocks.map((stock) => {
+              const ownedQuantity = getHoldingQuantity(stock.symbol);
+              const canSell = hasStock(stock.symbol);
+              const isTradingThis = trading === stock.symbol;
+
+              return (
+                <div key={stock.symbol} className="p-4 bg-white hover:bg-gray-50 transition-colors">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-semibold text-gray-900 text-base">{stock.symbol}</span>
+                        {formatChange(stock.change_percent)}
+                      </div>
+                      <p className="text-sm text-gray-600 truncate">{stock.name || stock.symbol}</p>
+                    </div>
+                    <div className="text-right flex-shrink-0 ml-3">
+                      <p className="text-base font-bold text-gray-900">{formatCurrency(stock.current_price || 0)}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                    <div className="text-xs text-gray-600">
+                      Holdings: {ownedQuantity > 0 ? (
+                        <span className="font-medium text-gray-900">{ownedQuantity.toFixed(4)}</span>
+                      ) : (
+                        <span className="text-gray-400">—</span>
+                      )}
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleBuyClick(stock)}
+                        disabled={isTradingThis}
+                        className="px-4 py-2 text-xs font-medium rounded-lg bg-teal-500 text-white hover:bg-teal-600 active:bg-teal-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors touch-manipulation"
+                      >
+                        {isTradingThis && !isSellMode ? 'Processing...' : 'Buy'}
+                      </button>
+                      {canSell && (
+                        <button
+                          onClick={() => handleSellClick(stock)}
+                          disabled={isTradingThis}
+                          className="px-4 py-2 text-xs font-medium rounded-lg border border-slate-300 hover:bg-slate-50 active:bg-slate-100 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors touch-manipulation"
+                        >
+                          {isTradingThis && isSellMode ? 'Processing...' : 'Sell'}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          )}
         </div>
       </div>
 

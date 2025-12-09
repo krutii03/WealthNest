@@ -119,25 +119,27 @@ export default function PortfolioPage() {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6">
-        <div className="flex items-center justify-between gap-3">
+    <div className="space-y-4 sm:space-y-6 px-4 sm:px-6 py-4 sm:py-6">
+      <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <h2 className="text-xl font-semibold text-slate-900">Portfolio</h2>
-            <div className="text-sm text-slate-600">Total Value: <strong className="text-slate-900">{formatCurrency(total, 'INR')}</strong></div>
+            <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Portfolio</h2>
+            <div className="text-xs sm:text-sm text-slate-600 mt-1">Total Value: <strong className="text-slate-900">{formatCurrency(total, 'INR')}</strong></div>
           </div>
-          <CsvExport filename="portfolio.csv" rows={rows} />
+          <div className="flex-shrink-0">
+            <CsvExport filename="portfolio.csv" rows={rows} />
+          </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between mb-3">
+      <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between mb-4">
           <input
             type="search"
             placeholder="Filter by name or symbol"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="w-full sm:w-80 rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="w-full sm:w-80 rounded-lg border border-slate-300 px-4 py-2.5 sm:py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 touch-manipulation"
             aria-label="Filter holdings"
           />
           <div className="text-xs text-slate-500">Sort: {sortKey} ({sortDir})</div>
@@ -149,52 +151,100 @@ export default function PortfolioPage() {
             <div className="h-4 w-4/5 bg-slate-100 rounded animate-pulse" />
           </div>
         ) : error ? (
-          <div className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-md p-2" role="alert">{error}</div>
+          <div className="text-xs sm:text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-md p-3" role="alert">{error}</div>
         ) : rows.length === 0 ? (
-          <div className="text-center py-12">
+          <div className="text-center py-8 sm:py-12">
             <div className="mx-auto h-12 w-12 rounded-full bg-slate-100 mb-3" />
-            <div className="text-slate-700 font-medium mb-1">No holdings yet</div>
-            <div className="text-slate-600 text-sm mb-3">Start investing to build your portfolio.</div>
-            <button className="inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium border border-slate-200 hover:shadow focus:ring-2 focus:ring-teal-500">Start Investing</button>
+            <div className="text-slate-700 font-medium mb-1 text-sm sm:text-base">No holdings yet</div>
+            <div className="text-slate-600 text-xs sm:text-sm mb-3">Start investing to build your portfolio.</div>
+            <button className="inline-flex items-center rounded-lg px-4 py-2.5 sm:py-2 text-sm font-medium border border-slate-200 hover:shadow active:bg-slate-50 focus:ring-2 focus:ring-teal-500 touch-manipulation">Start Investing</button>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-sm">
-              <thead className="text-slate-500">
-                <tr className="border-b">
-                  <th className="text-left py-2 cursor-pointer" onClick={() => changeSort('symbol')}>Symbol</th>
-                  <th className="text-left py-2 cursor-pointer" onClick={() => changeSort('name')}>Name</th>
-                  <th className="text-right py-2 cursor-pointer" onClick={() => changeSort('qty')}>Quantity</th>
-                  <th className="text-right py-2">Avg Price</th>
-                  <th className="text-right py-2">Current Price</th>
-                  <th className="text-right py-2 cursor-pointer" onClick={() => changeSort('value')}>Total Value</th>
-                  <th className="text-right py-2 cursor-pointer" onClick={() => changeSort('pl')}>P/L (%)</th>
-                  <th className="text-right py-2">Trend</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200">
-                {rows.map((r, i) => (
-                  <tr key={i} className="hover:bg-slate-50 focus-within:bg-slate-50">
-                    <td className="py-2 text-slate-900 font-medium">{r.symbol}</td>
-                    <td className="py-2 text-slate-700">{r.name}</td>
-                    <td className="py-2 text-right">{r.qty}</td>
-                    <td className="py-2 text-right">{formatCurrency(r.avg_price, 'INR')}</td>
-                    <td className="py-2 text-right">{formatCurrency(r.current_price, 'INR')}</td>
-                    <td className="py-2 text-right">{formatCurrency(r.value, 'INR')}</td>
-                    <td className={`py-2 text-right ${r.pl >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>{(r.pl * 100).toFixed(2)}%</td>
-                    <td className="py-2 text-right">
-                      <Sparkline 
-                        values={r.spark} 
-                        width={80} 
-                        height={24} 
-                        stroke={r.pl >= 0 ? '#10b981' : r.pl < 0 ? '#ef4444' : '#6b7280'} 
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <>
+            {/* Desktop Table View */}
+            <div className="hidden lg:block overflow-x-auto -mx-4 sm:mx-0">
+              <div className="inline-block min-w-full align-middle px-4 sm:px-0">
+                <table className="min-w-full text-sm">
+                  <thead className="text-slate-500">
+                    <tr className="border-b">
+                      <th className="text-left py-3 px-2 cursor-pointer hover:text-slate-700 touch-manipulation" onClick={() => changeSort('symbol')}>Symbol</th>
+                      <th className="text-left py-3 px-2 cursor-pointer hover:text-slate-700 touch-manipulation" onClick={() => changeSort('name')}>Name</th>
+                      <th className="text-right py-3 px-2 cursor-pointer hover:text-slate-700 touch-manipulation" onClick={() => changeSort('qty')}>Quantity</th>
+                      <th className="text-right py-3 px-2">Avg Price</th>
+                      <th className="text-right py-3 px-2">Current Price</th>
+                      <th className="text-right py-3 px-2 cursor-pointer hover:text-slate-700 touch-manipulation" onClick={() => changeSort('value')}>Total Value</th>
+                      <th className="text-right py-3 px-2 cursor-pointer hover:text-slate-700 touch-manipulation" onClick={() => changeSort('pl')}>P/L (%)</th>
+                      <th className="text-right py-3 px-2">Trend</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    {rows.map((r, i) => (
+                      <tr key={i} className="hover:bg-slate-50 focus-within:bg-slate-50">
+                        <td className="py-3 px-2 text-slate-900 font-medium">{r.symbol}</td>
+                        <td className="py-3 px-2 text-slate-700">{r.name}</td>
+                        <td className="py-3 px-2 text-right">{r.qty.toFixed(4)}</td>
+                        <td className="py-3 px-2 text-right">{formatCurrency(r.avg_price, 'INR')}</td>
+                        <td className="py-3 px-2 text-right">{formatCurrency(r.current_price, 'INR')}</td>
+                        <td className="py-3 px-2 text-right font-medium">{formatCurrency(r.value, 'INR')}</td>
+                        <td className={`py-3 px-2 text-right font-medium ${r.pl >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>{(r.pl * 100).toFixed(2)}%</td>
+                        <td className="py-3 px-2 text-right">
+                          <Sparkline 
+                            values={r.spark} 
+                            width={80} 
+                            height={24} 
+                            stroke={r.pl >= 0 ? '#10b981' : r.pl < 0 ? '#ef4444' : '#6b7280'} 
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Mobile/Tablet Card View */}
+            <div className="lg:hidden space-y-3">
+              {rows.map((r, i) => (
+                <div key={i} className="bg-slate-50 rounded-lg p-4 border border-slate-200">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-semibold text-slate-900 text-base">{r.symbol}</span>
+                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${r.pl >= 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}`}>
+                          {(r.pl * 100).toFixed(2)}%
+                        </span>
+                      </div>
+                      <p className="text-sm text-slate-600 truncate">{r.name}</p>
+                    </div>
+                    <Sparkline 
+                      values={r.spark} 
+                      width={60} 
+                      height={20} 
+                      stroke={r.pl >= 0 ? '#10b981' : r.pl < 0 ? '#ef4444' : '#6b7280'} 
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 text-xs sm:text-sm">
+                    <div>
+                      <span className="text-slate-500">Quantity:</span>
+                      <span className="ml-2 font-medium text-slate-900">{r.qty.toFixed(4)}</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-slate-500">Avg Price:</span>
+                      <span className="ml-2 font-medium text-slate-900">{formatCurrency(r.avg_price, 'INR')}</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500">Current:</span>
+                      <span className="ml-2 font-medium text-slate-900">{formatCurrency(r.current_price, 'INR')}</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-slate-500">Value:</span>
+                      <span className="ml-2 font-semibold text-slate-900">{formatCurrency(r.value, 'INR')}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
     </div>

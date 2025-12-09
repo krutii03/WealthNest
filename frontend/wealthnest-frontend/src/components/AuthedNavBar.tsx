@@ -145,11 +145,11 @@ export default function AuthedNavBar() {
       {mobileOpen && (
         <div className="md:hidden border-t border-slate-200 bg-white">
           <div className="px-4 py-2 flex flex-col gap-1">
-            <NavLink to="/dashboard" onClick={() => setMobileOpen(false)} className={({isActive}) => `block px-2 py-2 rounded-md ${isActive ? 'bg-teal-50 text-teal-700' : 'text-slate-700 hover:bg-slate-50'}`}>Dashboard</NavLink>
-            <NavLink to="/portfolio" onClick={() => setMobileOpen(false)} className={({isActive}) => `block px-2 py-2 rounded-md ${isActive ? 'bg-teal-50 text-teal-700' : 'text-slate-700 hover:bg-slate-50'}`}>Portfolio</NavLink>
-            <NavLink to="/wallet" onClick={() => setMobileOpen(false)} className={({isActive}) => `block px-2 py-2 rounded-md ${isActive ? 'bg-teal-50 text-teal-700' : 'text-slate-700 hover:bg-slate-50'}`}>Wallet</NavLink>
-            <NavLink to="/stocks" onClick={() => setMobileOpen(false)} className={({isActive}) => `block px-2 py-2 rounded-md ${isActive ? 'bg-teal-50 text-teal-700' : 'text-slate-700 hover:bg-slate-50'}`}>Stocks</NavLink>
-            <NavLink to="/mutual-funds" onClick={() => setMobileOpen(false)} className={({isActive}) => `block px-2 py-2 rounded-md ${isActive ? 'bg-teal-50 text-teal-700' : 'text-slate-700 hover:bg-slate-50'}`}>Mutual Funds</NavLink>
+            <NavLink to="/dashboard" onClick={() => setMobileOpen(false)} className={({isActive}) => `block px-3 py-3 rounded-lg text-base touch-manipulation ${isActive ? 'bg-teal-50 text-teal-700 font-medium' : 'text-slate-700 hover:bg-slate-50 active:bg-slate-100'}`}>Dashboard</NavLink>
+            <NavLink to="/portfolio" onClick={() => setMobileOpen(false)} className={({isActive}) => `block px-3 py-3 rounded-lg text-base touch-manipulation ${isActive ? 'bg-teal-50 text-teal-700 font-medium' : 'text-slate-700 hover:bg-slate-50 active:bg-slate-100'}`}>Portfolio</NavLink>
+            <NavLink to="/wallet" onClick={() => setMobileOpen(false)} className={({isActive}) => `block px-3 py-3 rounded-lg text-base touch-manipulation ${isActive ? 'bg-teal-50 text-teal-700 font-medium' : 'text-slate-700 hover:bg-slate-50 active:bg-slate-100'}`}>Wallet</NavLink>
+            <NavLink to="/stocks" onClick={() => setMobileOpen(false)} className={({isActive}) => `block px-3 py-3 rounded-lg text-base touch-manipulation ${isActive ? 'bg-teal-50 text-teal-700 font-medium' : 'text-slate-700 hover:bg-slate-50 active:bg-slate-100'}`}>Stocks</NavLink>
+            <NavLink to="/mutual-funds" onClick={() => setMobileOpen(false)} className={({isActive}) => `block px-3 py-3 rounded-lg text-base touch-manipulation ${isActive ? 'bg-teal-50 text-teal-700 font-medium' : 'text-slate-700 hover:bg-slate-50 active:bg-slate-100'}`}>Mutual Funds</NavLink>
           </div>
         </div>
       )}

@@ -267,54 +267,54 @@ export default function Home() {
     <main className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-b from-sky-50 via-white to-slate-50">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 lg:py-20 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-14 lg:py-20 grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 items-center">
           {/* Left copy */}
           <div className="relative z-10">
-            <p className="inline-flex items-center gap-2 rounded-full bg-sky-100 text-sky-700 px-4 py-1.5 text-xs font-semibold mb-6 shadow-sm">
+            <p className="inline-flex items-center gap-2 rounded-full bg-sky-100 text-sky-700 px-3 sm:px-4 py-1 sm:py-1.5 text-xs font-semibold mb-4 sm:mb-6 shadow-sm">
               <span>✨</span>
               <span>WealthNest</span>
             </p>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 mb-4">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-slate-900 mb-3 sm:mb-4 leading-tight">
               Grow smarter.<br />
               <span className="bg-gradient-to-r from-sky-600 to-blue-600 bg-clip-text text-transparent">Invest better.</span>
             </h1>
-            <p className="mt-4 text-slate-600 text-lg leading-relaxed">
+            <p className="mt-3 sm:mt-4 text-slate-600 text-base sm:text-lg leading-relaxed">
               WealthNest — Where your investments take flight. 📈
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row flex-wrap gap-3">
               {!isAuthenticated ? (
                 <>
-                  <Link to="/signup" className="group inline-flex items-center justify-center rounded-lg border border-transparent bg-emerald-600 text-white px-6 py-3 font-medium hover:bg-emerald-700 hover:shadow-lg hover:scale-105 transition-all duration-200">
+                  <Link to="/signup" className="group inline-flex items-center justify-center rounded-lg border border-transparent bg-emerald-600 text-white px-6 py-3 sm:py-2.5 text-sm sm:text-base font-medium hover:bg-emerald-700 hover:shadow-lg active:bg-emerald-800 touch-manipulation transition-all duration-200">
                     Get Started
                     <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
                   </Link>
-                  <Link to="/about" className="inline-flex items-center justify-center rounded-lg border-2 border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400 px-6 py-3 font-medium transition-all duration-200">
+                  <Link to="/about" className="inline-flex items-center justify-center rounded-lg border-2 border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400 active:bg-slate-100 px-6 py-3 sm:py-2.5 text-sm sm:text-base font-medium touch-manipulation transition-all duration-200">
                     Learn More
                   </Link>
                 </>
               ) : (
-                <Link to="/dashboard" className="group inline-flex items-center justify-center rounded-lg border border-transparent bg-emerald-600 text-white px-6 py-3 font-medium hover:bg-emerald-700 hover:shadow-lg hover:scale-105 transition-all duration-200">
+                <Link to="/dashboard" className="group inline-flex items-center justify-center rounded-lg border border-transparent bg-emerald-600 text-white px-6 py-3 sm:py-2.5 text-sm sm:text-base font-medium hover:bg-emerald-700 hover:shadow-lg active:bg-emerald-800 touch-manipulation transition-all duration-200">
                   Go to Dashboard
                   <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
                 </Link>
               )}
             </div>
             {/* Quick stats or features */}
-            <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="text-center p-4 bg-white rounded-lg border border-slate-200 hover:shadow-md hover:border-sky-300 transition-all">
-                <div className="text-2xl font-bold text-sky-600 mb-1">100+</div>
+            <div className="mt-8 sm:mt-10 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+              <div className="text-center p-3 sm:p-4 bg-white rounded-lg border border-slate-200 hover:shadow-md hover:border-sky-300 transition-all">
+                <div className="text-xl sm:text-2xl font-bold text-sky-600 mb-1">100+</div>
                 <div className="text-xs text-slate-600 font-medium">Assets</div>
               </div>
-              <div className="text-center p-4 bg-white rounded-lg border border-slate-200 hover:shadow-md hover:border-emerald-300 transition-all">
-                <div className="text-2xl font-bold text-emerald-600 mb-1">24/7</div>
+              <div className="text-center p-3 sm:p-4 bg-white rounded-lg border border-slate-200 hover:shadow-md hover:border-emerald-300 transition-all">
+                <div className="text-xl sm:text-2xl font-bold text-emerald-600 mb-1">24/7</div>
                 <div className="text-xs text-slate-600 font-medium">Trading</div>
               </div>
-              <div className="text-center p-4 bg-white rounded-lg border border-slate-200 hover:shadow-md hover:border-amber-300 transition-all">
-                <div className="text-2xl font-bold text-amber-600 mb-1">₹0</div>
+              <div className="text-center p-3 sm:p-4 bg-white rounded-lg border border-slate-200 hover:shadow-md hover:border-amber-300 transition-all">
+                <div className="text-xl sm:text-2xl font-bold text-amber-600 mb-1">₹0</div>
                 <div className="text-xs text-slate-600 font-medium">Fees</div>
               </div>
-              <div className="text-center p-4 bg-white rounded-lg border border-slate-200 hover:shadow-md hover:border-indigo-300 transition-all">
-                <div className="text-2xl font-bold text-indigo-600 mb-1">🔒</div>
+              <div className="text-center p-3 sm:p-4 bg-white rounded-lg border border-slate-200 hover:shadow-md hover:border-indigo-300 transition-all">
+                <div className="text-xl sm:text-2xl font-bold text-indigo-600 mb-1">🔒</div>
                 <div className="text-xs text-slate-600 font-medium">Secure</div>
               </div>
             </div>
@@ -345,12 +345,12 @@ export default function Home() {
       </section>
 
       {/* Highlights Section */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">Everything You Need to Invest</h2>
-          <p className="text-slate-600">Tools and features to help you make smarter investment decisions</p>
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="text-center mb-6 sm:mb-8">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2">Everything You Need to Invest</h2>
+          <p className="text-sm sm:text-base text-slate-600 px-4">Tools and features to help you make smarter investment decisions</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
           <HighlightCard title="Simulated Trading" desc="Practice without risk in a live-like market sandbox." cta="Try Now" to="/dashboard" iconBg="bg-emerald-100" icon="📊" />
           <HighlightCard title="Real-time Prices" desc="Track assets with lightning-fast updates." cta="View Assets" to="/assets" iconBg="bg-sky-100" icon="⚡" />
           <HighlightCard title="Smart Calculators" desc="Plan SIPs and lumpsums with clarity." cta="Open Calculators" to="/calculators" iconBg="bg-indigo-100" icon="🧮" />
@@ -361,40 +361,40 @@ export default function Home() {
       {/* Market Buzz */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-6">
         <div className="flex flex-col">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <span className="text-2xl">📰</span>
-              <h2 className="text-xl font-semibold text-slate-900">Market Buzz</h2>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <span className="text-xl sm:text-2xl">📰</span>
+              <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Market Buzz</h2>
             </div>
-            <Link to="/market-news" className="text-sky-600 hover:text-sky-700 text-sm font-medium hover:underline">View Digest →</Link>
+            <Link to="/market-news" className="text-sky-600 hover:text-sky-700 text-sm font-medium hover:underline touch-manipulation">View Digest →</Link>
           </div>
           <div className="rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow">
             {buzzLoading && (
-              <div className="p-6 text-sm text-slate-500">Loading latest market buzz…</div>
+              <div className="p-4 sm:p-6 text-sm text-slate-500">Loading latest market buzz…</div>
             )}
             {buzzError && !buzzLoading && (
-              <div className="p-6 text-sm text-red-600">{buzzError}</div>
+              <div className="p-4 sm:p-6 text-sm text-red-600">{buzzError}</div>
             )}
             {!buzzLoading && !buzzError && (
               <>
                   <ul className="divide-y divide-slate-200">
                     {buzz.slice(0, 2).map((n, idx) => (
-                      <li key={`${n.title}-${idx}`} className="p-4 hover:bg-sky-50 transition-colors group">
+                      <li key={`${n.title}-${idx}`} className="p-4 sm:p-5 hover:bg-sky-50 active:bg-sky-100 transition-colors group">
                         <a 
                           href={n.url || '#'} 
                           target="_blank" 
                           rel="noreferrer"
-                          className="block"
+                          className="block touch-manipulation"
                         >
-                          <div className="flex items-start justify-between gap-4">
-                            <div className="flex-1">
-                              <p className="text-slate-800 font-medium group-hover:text-sky-600 transition-colors leading-snug">{n.title}</p>
-                              <p className="text-xs text-slate-500 mt-1.5 flex items-center gap-2">
+                          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4">
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm sm:text-base text-slate-800 font-medium group-hover:text-sky-600 transition-colors leading-snug break-words">{n.title}</p>
+                              <p className="text-xs text-slate-500 mt-1.5 flex flex-wrap items-center gap-2">
                                 <span>{n.source}</span>
                                 {n.sentiment && (
                                   <>
-                                    <span>·</span>
-                                    <span className={`px-2 py-0.5 rounded-full ${
+                                    <span className="hidden sm:inline">·</span>
+                                    <span className={`px-2 py-0.5 rounded-full text-xs ${
                                       n.sentiment.toLowerCase().includes('positive') || n.sentiment.toLowerCase() === 'top news'
                                         ? 'bg-emerald-100 text-emerald-700'
                                         : 'bg-slate-100 text-slate-600'
@@ -405,13 +405,13 @@ export default function Home() {
                                 )}
                               </p>
                             </div>
-                            <span className="text-xs text-slate-400 whitespace-nowrap">{new Date(n.time).toLocaleTimeString()}</span>
+                            <span className="text-xs text-slate-400 whitespace-nowrap flex-shrink-0">{new Date(n.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
                           </div>
                         </a>
                       </li>
                     ))}
                   {buzz.length === 0 && (
-                    <li className="p-4 text-sm text-slate-500">No buzz items available.</li>
+                    <li className="p-4 sm:p-6 text-sm text-slate-500">No buzz items available.</li>
                   )}
                 </ul>
                 {buzz.length > 2 && (
@@ -428,12 +428,12 @@ export default function Home() {
       </section>
 
       {/* Word of the Day */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-12">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-8 sm:pb-12">
         <div className="flex flex-col">
           <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <span className="text-2xl">📚</span>
-              <h2 className="text-xl font-semibold text-slate-900">Word of the Day</h2>
+            <div className="flex items-center gap-2 sm:gap-3">
+              <span className="text-xl sm:text-2xl">📚</span>
+              <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Word of the Day</h2>
             </div>
           </div>
           <div className="rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow">
@@ -466,46 +466,46 @@ export default function Home() {
       </section>
 
       {/* Calculator Preview */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
-            <div className="flex items-center gap-3">
-              <span className="text-2xl">🧮</span>
-              <h2 className="text-xl font-semibold text-slate-900">Calculator Preview</h2>
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-8 sm:pb-12">
+        <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 sm:mb-6">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <span className="text-xl sm:text-2xl">🧮</span>
+              <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Calculator Preview</h2>
             </div>
-            <Link to="/calculators" className="text-sky-600 hover:text-sky-700 text-sm font-medium hover:underline">Explore All Calculators →</Link>
+            <Link to="/calculators" className="text-sky-600 hover:text-sky-700 text-sm font-medium hover:underline touch-manipulation">Explore All Calculators →</Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {/* SIP */}
-            <div className="rounded-lg border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-6 hover:shadow-lg transition-shadow">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-xl">💰</span>
-                <h3 className="font-semibold text-slate-900 text-lg">SIP Calculator</h3>
+            <div className="rounded-lg border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-4 sm:p-6 hover:shadow-lg transition-shadow">
+              <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                <span className="text-lg sm:text-xl">💰</span>
+                <h3 className="font-semibold text-slate-900 text-base sm:text-lg">SIP Calculator</h3>
               </div>
-              <div className="mt-4 grid grid-cols-2 gap-3">
+              <div className="mt-3 sm:mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <LabeledInput label="Amount (₹)" value={sipAmount} onChange={v => setSipAmount(v)} />
                 <LabeledInput label="Years" value={sipYears} onChange={v => setSipYears(v)} />
                 <LabeledInput label="Rate (% p.a.)" value={sipRate} onChange={v => setSipRate(v)} />
               </div>
               <div className="mt-4 p-3 bg-white rounded-lg border border-emerald-100">
                 <p className="text-xs text-slate-500 mb-1">Future Value</p>
-                <p className="text-2xl font-bold text-emerald-600">₹ {sipFV.toLocaleString(undefined, { maximumFractionDigits: 0 })}</p>
+                <p className="text-xl sm:text-2xl font-bold text-emerald-600 break-words">₹ {sipFV.toLocaleString(undefined, { maximumFractionDigits: 0 })}</p>
               </div>
             </div>
             {/* Lumpsum */}
-            <div className="rounded-lg border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 to-white p-6 hover:shadow-lg transition-shadow">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-xl">💎</span>
-                <h3 className="font-semibold text-slate-900 text-lg">Lumpsum Calculator</h3>
+            <div className="rounded-lg border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 to-white p-4 sm:p-6 hover:shadow-lg transition-shadow">
+              <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                <span className="text-lg sm:text-xl">💎</span>
+                <h3 className="font-semibold text-slate-900 text-base sm:text-lg">Lumpsum Calculator</h3>
               </div>
-              <div className="mt-4 grid grid-cols-2 gap-3">
+              <div className="mt-3 sm:mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <LabeledInput label="Amount (₹)" value={lsAmount} onChange={v => setLsAmount(v)} />
                 <LabeledInput label="Years" value={lsYears} onChange={v => setLsYears(v)} />
                 <LabeledInput label="Rate (% p.a.)" value={lsRate} onChange={v => setLsRate(v)} />
               </div>
               <div className="mt-4 p-3 bg-white rounded-lg border border-indigo-100">
                 <p className="text-xs text-slate-500 mb-1">Future Value</p>
-                <p className="text-2xl font-bold text-indigo-600">₹ {lsFV.toLocaleString(undefined, { maximumFractionDigits: 0 })}</p>
+                <p className="text-xl sm:text-2xl font-bold text-indigo-600 break-words">₹ {lsFV.toLocaleString(undefined, { maximumFractionDigits: 0 })}</p>
               </div>
             </div>
           </div>
@@ -513,14 +513,14 @@ export default function Home() {
       </section>
 
       {/* Leaderboard (Full-width) */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
-            <div className="flex items-center gap-3">
-              <span className="text-2xl">🏆</span>
-              <h3 className="text-lg font-semibold text-slate-900">Top Performers</h3>
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-8 sm:pb-12">
+        <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <span className="text-xl sm:text-2xl">🏆</span>
+              <h3 className="text-base sm:text-lg font-semibold text-slate-900">Top Performers</h3>
             </div>
-            <Link to="/leaderboard" className="text-sky-600 hover:text-sky-700 text-sm font-medium hover:underline">Open Full Board →</Link>
+            <Link to="/leaderboard" className="text-sky-600 hover:text-sky-700 text-sm font-medium hover:underline touch-manipulation">Open Full Board →</Link>
           </div>
           {leadersLoading && (
             <p className="text-sm text-slate-500">Loading leaderboard…</p>
@@ -529,49 +529,74 @@ export default function Home() {
             <p className="text-sm text-red-600">{leadersError}</p>
           )}
           {!leadersLoading && !leadersError && (
-            <div className="overflow-x-auto">
-              <table className="min-w-full text-sm">
-                <thead className="text-left text-slate-500 bg-slate-50">
-                  <tr>
-                    <th className="py-3 px-4 font-semibold">Rank</th>
-                    <th className="py-3 px-4 font-semibold">User</th>
-                    <th className="py-3 px-4 font-semibold">Points</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200">
-                  {leaders.map((r, idx) => (
-                    <tr key={r.leaderboard_id} className={`hover:bg-sky-50 transition-colors ${idx < 3 ? 'bg-amber-50/50' : ''}`}>
-                      <td className="py-3 px-4 font-bold text-slate-800">
-                        {idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : '#'}
-                        {r.rank ?? idx + 1}
-                      </td>
-                      <td className="py-3 px-4 text-slate-700 font-medium">{r.user?.name ?? r.user_id}</td>
-                      <td className="py-3 px-4 text-slate-700 font-semibold">{(r.points_total ?? 0).toLocaleString()} pts</td>
-                    </tr>
-                  ))}
-                  {leaders.length === 0 && (
-                    <tr>
-                      <td colSpan={3} className="py-3 text-slate-500">No entries found.</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+            <>
+              {/* Desktop Table View */}
+              <div className="hidden sm:block overflow-x-auto -mx-4 sm:mx-0">
+                <div className="inline-block min-w-full align-middle px-4 sm:px-0">
+                  <table className="min-w-full text-sm">
+                    <thead className="text-left text-slate-500 bg-slate-50">
+                      <tr>
+                        <th className="py-3 px-4 font-semibold">Rank</th>
+                        <th className="py-3 px-4 font-semibold">User</th>
+                        <th className="py-3 px-4 font-semibold">Points</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-200">
+                      {leaders.map((r, idx) => (
+                        <tr key={r.leaderboard_id} className={`hover:bg-sky-50 transition-colors ${idx < 3 ? 'bg-amber-50/50' : ''}`}>
+                          <td className="py-3 px-4 font-bold text-slate-800">
+                            {idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : '#'}
+                            {r.rank ?? idx + 1}
+                          </td>
+                          <td className="py-3 px-4 text-slate-700 font-medium">{r.user?.name ?? r.user_id}</td>
+                          <td className="py-3 px-4 text-slate-700 font-semibold">{(r.points_total ?? 0).toLocaleString()} pts</td>
+                        </tr>
+                      ))}
+                      {leaders.length === 0 && (
+                        <tr>
+                          <td colSpan={3} className="py-3 px-4 text-slate-500">No entries found.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              
+              {/* Mobile Card View */}
+              <div className="sm:hidden space-y-3">
+                {leaders.map((r, idx) => (
+                  <div key={r.leaderboard_id} className={`rounded-lg border border-slate-200 p-3 ${idx < 3 ? 'bg-amber-50/50 border-amber-200' : 'bg-white'}`}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <span className="text-lg font-bold text-slate-800">
+                          {idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : '#'}{r.rank ?? idx + 1}
+                        </span>
+                        <span className="text-sm font-medium text-slate-700">{r.user?.name ?? r.user_id}</span>
+                      </div>
+                      <span className="text-sm font-semibold text-slate-700">{(r.points_total ?? 0).toLocaleString()} pts</span>
+                    </div>
+                  </div>
+                ))}
+                {leaders.length === 0 && (
+                  <div className="text-sm text-slate-500 py-3 text-center">No entries found.</div>
+                )}
+              </div>
+            </>
           )}
         </div>
       </section>
 
       {/* Chatbot/FAQ Preview */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
-            <div className="flex items-center gap-3">
-              <span className="text-2xl">❓</span>
-              <h2 className="text-xl font-semibold text-slate-900">Frequently Asked Questions</h2>
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-8 sm:pb-12">
+        <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <span className="text-xl sm:text-2xl">❓</span>
+              <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Frequently Asked Questions</h2>
             </div>
-            <Link to="/faq" className="text-sky-600 hover:text-sky-700 text-sm font-medium hover:underline">Ask More →</Link>
+            <Link to="/faq" className="text-sky-600 hover:text-sky-700 text-sm font-medium hover:underline touch-manipulation">Ask More →</Link>
           </div>
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             {faqs.map(item => (
               <FAQ key={item.id} item={item} />
             ))}
@@ -605,13 +630,13 @@ export default function Home() {
 // --- Small Components ---
 function HighlightCard({ title, desc, cta, to, iconBg, icon = "📈" }: { title: string; desc: string; cta: string; to: string; iconBg: string; icon?: string }) {
   return (
-    <div className="group rounded-xl border border-slate-200 bg-white p-6 hover:shadow-lg hover:border-sky-300 hover:-translate-y-1 transition-all duration-200">
-      <div className={`w-12 h-12 rounded-xl ${iconBg} mb-4 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-200`}>
+    <div className="group rounded-xl border border-slate-200 bg-white p-4 sm:p-6 hover:shadow-lg hover:border-sky-300 hover:-translate-y-1 transition-all duration-200 touch-manipulation">
+      <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${iconBg} mb-3 sm:mb-4 flex items-center justify-center text-xl sm:text-2xl group-hover:scale-110 transition-transform duration-200`}>
         {icon}
       </div>
-      <h3 className="text-base font-semibold text-slate-900 mb-2">{title}</h3>
-      <p className="text-sm text-slate-600 leading-relaxed">{desc}</p>
-      <Link to={to} className="inline-flex mt-5 items-center text-sky-600 hover:text-sky-700 text-sm font-medium group/link">
+      <h3 className="text-sm sm:text-base font-semibold text-slate-900 mb-2">{title}</h3>
+      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{desc}</p>
+      <Link to={to} className="inline-flex mt-4 sm:mt-5 items-center text-sky-600 hover:text-sky-700 text-sm font-medium group/link touch-manipulation">
         {cta}
         <span className="ml-1 group-hover/link:translate-x-1 transition-transform">→</span>
       </Link>
@@ -621,13 +646,14 @@ function HighlightCard({ title, desc, cta, to, iconBg, icon = "📈" }: { title:
 
 function LabeledInput({ label, value, onChange }: { label: string; value: number; onChange: (v: number) => void }) {
   return (
-    <label className="text-sm">
-      <span className="text-slate-600">{label}</span>
+    <label className="text-xs sm:text-sm">
+      <span className="text-slate-600 block mb-1">{label}</span>
       <input
-        className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
+        className="w-full rounded-lg border border-slate-300 px-3 py-2.5 sm:py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 touch-manipulation"
         type="number"
         value={value}
         min={0}
+        inputMode="numeric"
         onChange={(e) => onChange(Number(e.target.value))}
       />
     </label>
@@ -639,15 +665,15 @@ function FAQ({ item }: { item: FAQItem }) {
   return (
     <div className={`rounded-lg bg-sky-600 text-white overflow-hidden transition-all duration-200 ${open ? 'shadow-lg' : 'shadow-sm'}`}>
       <button
-        className="w-full text-left flex items-start justify-between gap-4 px-4 py-3 hover:bg-sky-700 transition-colors focus:outline-none"
+        className="w-full text-left flex items-start justify-between gap-3 sm:gap-4 px-3 sm:px-4 py-3 hover:bg-sky-700 active:bg-sky-800 transition-colors focus:outline-none touch-manipulation"
         aria-expanded={open}
         onClick={() => setOpen(v => !v)}
       >
-        <span className="font-medium text-white flex-1">{item.q}</span>
-        <span className="text-white/80 text-lg font-bold min-w-[20px] text-center transition-transform duration-200">{open ? '−' : '+'}</span>
+        <span className="font-medium text-white flex-1 text-sm sm:text-base">{item.q}</span>
+        <span className="text-white/80 text-lg font-bold min-w-[24px] text-center transition-transform duration-200 flex-shrink-0">{open ? '−' : '+'}</span>
       </button>
       {open && (
-        <div className="px-4 pb-4 pt-1 text-sm text-white/90 leading-relaxed animate-fade-in">
+        <div className="px-3 sm:px-4 pb-3 sm:pb-4 pt-1 text-xs sm:text-sm text-white/90 leading-relaxed animate-fade-in">
           {item.a}
         </div>
       )}

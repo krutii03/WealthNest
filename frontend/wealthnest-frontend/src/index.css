@@ -38,6 +38,18 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  /* Better mobile text rendering */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Touch-friendly interactions */
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+}
+
+button, a, input, select, textarea {
+  touch-action: manipulation;
 }
 
 h1 {

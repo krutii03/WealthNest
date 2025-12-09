@@ -404,34 +404,34 @@ export default function WalletPage() {
   }, [tx]);
 
   return (
-    <div className="container max-w-7xl mx-auto px-6 py-6 grid grid-cols-12 gap-6">
-      <div className="col-span-12 lg:col-span-8 space-y-6">
-        <section className="relative overflow-hidden bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6">
+    <div className="container max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6 grid grid-cols-12 gap-4 sm:gap-6">
+      <div className="col-span-12 lg:col-span-8 space-y-4 sm:space-y-6">
+        <section className="relative overflow-hidden bg-white rounded-xl sm:rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6">
           <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-white via-white to-teal-50 opacity-70" />
-          <div className="relative flex items-center justify-between">
-            <div>
-              <h2 className="text-xl font-semibold text-slate-900">Wallet</h2>
+          <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex-1">
+              <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Wallet</h2>
               {loading ? (
                 <div className="mt-2 h-6 w-40 bg-slate-100 animate-pulse rounded" />
               ) : wallet ? (
                 <>
-                  <div className="text-3xl font-semibold text-slate-900 mt-1">{formatCurrency(wallet.balance, wallet.currency)}</div>
-                  <div className="text-xs text-slate-500 mt-1">Currency: {wallet.currency} • Last updated: {new Date().toLocaleString()}</div>
+                  <div className="text-2xl sm:text-3xl font-semibold text-slate-900 mt-1">{formatCurrency(wallet.balance, wallet.currency)}</div>
+                  <div className="text-xs text-slate-500 mt-1 break-words">Currency: {wallet.currency} • Last updated: {new Date().toLocaleString()}</div>
                 </>
               ) : (
                 <div className="text-sm text-slate-600 mt-2">No wallet found</div>
               )}
             </div>
-            <div className="flex gap-2">
-              <button type="button" onClick={() => setDepositOpen(true)} className="rounded-lg px-4 py-2 text-sm font-medium bg-teal-500 text-white hover:bg-teal-600 focus:ring-2 focus:ring-teal-500">Add Money</button>
-              <button type="button" onClick={() => setWithdrawOpen(true)} className="rounded-lg px-4 py-2 text-sm font-medium bg-slate-700 text-white hover:bg-slate-800 focus:ring-2 focus:ring-teal-500">Withdraw</button>
+            <div className="flex gap-2 sm:gap-3 flex-shrink-0">
+              <button type="button" onClick={() => setDepositOpen(true)} className="flex-1 sm:flex-none rounded-lg px-4 sm:px-5 py-2.5 sm:py-2 text-sm font-medium bg-teal-500 text-white hover:bg-teal-600 active:bg-teal-700 focus:ring-2 focus:ring-teal-500 touch-manipulation">Add Money</button>
+              <button type="button" onClick={() => setWithdrawOpen(true)} className="flex-1 sm:flex-none rounded-lg px-4 sm:px-5 py-2.5 sm:py-2 text-sm font-medium bg-slate-700 text-white hover:bg-slate-800 active:bg-slate-900 focus:ring-2 focus:ring-teal-500 touch-manipulation">Withdraw</button>
             </div>
           </div>
         </section>
 
-        <section className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-slate-900">Recent Activity</h3>
+        <section className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-base sm:text-lg font-semibold text-slate-900">Recent Activity</h3>
           </div>
           {loading ? (
             <div className="space-y-2 mt-2">
@@ -441,95 +441,123 @@ export default function WalletPage() {
           ) : tx.length === 0 ? (
             <p className="text-sm text-slate-600 mt-2">No transactions yet — add funds to get started!</p>
           ) : (
-            <div className="mt-2 overflow-x-auto">
-              <table className="min-w-full text-sm">
-                <thead className="text-slate-500">
-                  <tr className="border-b">
-                    <th className="text-left py-2">Date & Time</th>
-                    <th className="text-left py-2">Type</th>
-                    <th className="text-right py-2">Amount</th>
-                    <th className="text-right py-2">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200">
-                  {tx.slice(0, 10).map((t, i) => (
-                    <tr key={i}>
-                      <td className="py-2 text-slate-700">{new Date(t.created_at ?? '').toLocaleString()}</td>
-                      <td className="py-2 text-slate-800 capitalize">{t.transaction_type}</td>
-                      <td className="py-2 text-right font-medium">{formatCurrency(t.amount ?? 0, wallet?.currency ?? 'INR')}</td>
-                      <td className="py-2 text-right">
-                        <span className={`text-xs px-2 py-0.5 rounded-full ring-1 ${
-                          t.status === 'completed'
-                            ? 'bg-emerald-50 text-emerald-700 ring-emerald-200'
-                            : t.status === 'pending'
-                            ? 'bg-amber-50 text-amber-700 ring-amber-200'
-                            : 'bg-rose-50 text-rose-700 ring-rose-200'
-                        }`}>{t.status}</span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <>
+              {/* Desktop Table View */}
+              <div className="hidden sm:block mt-2 overflow-x-auto -mx-4 sm:mx-0">
+                <div className="inline-block min-w-full align-middle px-4 sm:px-0">
+                  <table className="min-w-full text-sm">
+                    <thead className="text-slate-500">
+                      <tr className="border-b">
+                        <th className="text-left py-2 px-2">Date & Time</th>
+                        <th className="text-left py-2 px-2">Type</th>
+                        <th className="text-right py-2 px-2">Amount</th>
+                        <th className="text-right py-2 px-2">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-200">
+                      {tx.slice(0, 10).map((t, i) => (
+                        <tr key={i}>
+                          <td className="py-3 px-2 text-slate-700 text-xs sm:text-sm">{new Date(t.created_at ?? '').toLocaleString()}</td>
+                          <td className="py-3 px-2 text-slate-800 capitalize">{t.transaction_type}</td>
+                          <td className="py-3 px-2 text-right font-medium">{formatCurrency(t.amount ?? 0, wallet?.currency ?? 'INR')}</td>
+                          <td className="py-3 px-2 text-right">
+                            <span className={`text-xs px-2 py-1 rounded-full ring-1 ${
+                              t.status === 'completed'
+                                ? 'bg-emerald-50 text-emerald-700 ring-emerald-200'
+                                : t.status === 'pending'
+                                ? 'bg-amber-50 text-amber-700 ring-amber-200'
+                                : 'bg-rose-50 text-rose-700 ring-rose-200'
+                            }`}>{t.status}</span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              {/* Mobile Card View */}
+              <div className="sm:hidden space-y-3 mt-2">
+                {tx.slice(0, 10).map((t, i) => (
+                  <div key={i} className="bg-slate-50 rounded-lg p-3 border border-slate-200">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex-1">
+                        <div className="text-sm font-semibold text-slate-900 capitalize mb-1">{t.transaction_type}</div>
+                        <div className="text-xs text-slate-600">{new Date(t.created_at ?? '').toLocaleDateString()} {new Date(t.created_at ?? '').toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                      </div>
+                      <span className={`text-xs px-2 py-1 rounded-full ring-1 flex-shrink-0 ml-2 ${
+                        t.status === 'completed'
+                          ? 'bg-emerald-50 text-emerald-700 ring-emerald-200'
+                          : t.status === 'pending'
+                          ? 'bg-amber-50 text-amber-700 ring-amber-200'
+                          : 'bg-rose-50 text-rose-700 ring-rose-200'
+                      }`}>{t.status}</span>
+                    </div>
+                    <div className="text-base font-bold text-slate-900">{formatCurrency(t.amount ?? 0, wallet?.currency ?? 'INR')}</div>
+                  </div>
+                ))}
+              </div>
+            </>
           )}
         </section>
 
-        <section className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6">
-          <h3 className="text-lg font-semibold text-slate-900 mb-2">Funds Movement Summary</h3>
-          <div className="space-y-3">
+        <section className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-4">Funds Movement Summary</h3>
+          <div className="space-y-4">
             <div>
-              <div className="flex justify-between text-xs text-slate-600"><span>Deposits</span><span>{movementSummary.depPct}%</span></div>
-              <div className="h-2 bg-slate-100 rounded-full overflow-hidden"><div className="h-2 bg-teal-500" style={{width: `${movementSummary.depPct}%`}}/></div>
+              <div className="flex justify-between text-xs sm:text-sm text-slate-600 mb-1"><span>Deposits</span><span className="font-medium">{movementSummary.depPct}%</span></div>
+              <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden"><div className="h-2.5 bg-teal-500 rounded-full transition-all" style={{width: `${movementSummary.depPct}%`}}/></div>
             </div>
             <div>
-              <div className="flex justify-between text-xs text-slate-600"><span>Withdrawals</span><span>{movementSummary.witPct}%</span></div>
-              <div className="h-2 bg-slate-100 rounded-full overflow-hidden"><div className="h-2 bg-slate-400" style={{width: `${movementSummary.witPct}%`}}/></div>
+              <div className="flex justify-between text-xs sm:text-sm text-slate-600 mb-1"><span>Withdrawals</span><span className="font-medium">{movementSummary.witPct}%</span></div>
+              <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden"><div className="h-2.5 bg-slate-400 rounded-full transition-all" style={{width: `${movementSummary.witPct}%`}}/></div>
             </div>
           </div>
         </section>
       </div>
 
       <Modal open={depositOpen} title="Add Money" onClose={() => setDepositOpen(false)}>
-        <div className="space-y-3">
+        <div className="space-y-4 sm:space-y-3">
           <label className="block text-sm text-slate-700">
             Amount (INR)
             <input 
               type="number" 
               value={amount} 
               onChange={(e) => setAmount(Number(e.target.value))} 
-              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500" 
+              className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 text-base sm:text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500" 
               min="100"
+              inputMode="numeric"
             />
-            <p className="text-xs text-slate-500 mt-1">Minimum deposit: ₹100</p>
+            <p className="text-xs text-slate-500 mt-2">Minimum deposit: ₹100</p>
           </label>
-          <div className="flex justify-end gap-2">
-            <button onClick={() => setDepositOpen(false)} className="rounded-lg px-3 py-2 text-sm font-medium border border-slate-200 hover:shadow">Cancel</button>
-            <button type="button" onClick={confirmDeposit} className="rounded-lg px-3 py-2 text-sm font-medium bg-teal-500 text-white hover:bg-teal-600">Proceed to Payment</button>
+          <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-2 pt-2">
+            <button onClick={() => setDepositOpen(false)} className="w-full sm:w-auto rounded-lg px-4 py-3 sm:py-2 text-sm font-medium border border-slate-200 hover:bg-slate-50 active:bg-slate-100 touch-manipulation">Cancel</button>
+            <button type="button" onClick={confirmDeposit} className="w-full sm:w-auto rounded-lg px-4 py-3 sm:py-2 text-sm font-medium bg-teal-500 text-white hover:bg-teal-600 active:bg-teal-700 touch-manipulation">Proceed to Payment</button>
           </div>
         </div>
       </Modal>
 
       <Modal open={withdrawOpen} title="Withdraw Money" onClose={() => setWithdrawOpen(false)}>
-        <div className="space-y-3">
+        <div className="space-y-4 sm:space-y-3">
           <label className="block text-sm text-slate-700">
             Amount (INR)
             <input 
               type="number" 
               value={amount} 
               onChange={(e) => setAmount(Number(e.target.value))} 
-              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500" 
+              className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 text-base sm:text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500" 
               min="1"
+              inputMode="numeric"
             />
-            <p className="text-xs text-slate-500 mt-1">Minimum withdrawal: ₹1</p>
+            <p className="text-xs text-slate-500 mt-2">Minimum withdrawal: ₹1</p>
           </label>
           {wallet && (
-            <p className="text-xs text-slate-500">
-              Available balance: {formatCurrency(wallet.balance, wallet.currency)}
+            <p className="text-sm text-slate-600 bg-slate-50 p-3 rounded-lg">
+              Available balance: <span className="font-semibold">{formatCurrency(wallet.balance, wallet.currency)}</span>
             </p>
           )}
-          <div className="flex justify-end gap-2">
-            <button onClick={() => setWithdrawOpen(false)} className="rounded-lg px-3 py-2 text-sm font-medium border border-slate-200 hover:shadow">Cancel</button>
-            <button type="button" onClick={confirmWithdraw} className="rounded-lg px-3 py-2 text-sm font-medium bg-slate-700 text-white hover:bg-slate-800">Withdraw</button>
+          <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-2 pt-2">
+            <button onClick={() => setWithdrawOpen(false)} className="w-full sm:w-auto rounded-lg px-4 py-3 sm:py-2 text-sm font-medium border border-slate-200 hover:bg-slate-50 active:bg-slate-100 touch-manipulation">Cancel</button>
+            <button type="button" onClick={confirmWithdraw} className="w-full sm:w-auto rounded-lg px-4 py-3 sm:py-2 text-sm font-medium bg-slate-700 text-white hover:bg-slate-800 active:bg-slate-900 touch-manipulation">Withdraw</button>
           </div>
         </div>
       </Modal>
