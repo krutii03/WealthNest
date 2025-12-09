@@ -58,21 +58,59 @@ export default function WalletPage() {
         const userId = sessionData.session.user.id;
 
         try {
-          const walletData = await getWalletFromUtils();
-          setWallet({
-            wallet_id: 0,
-            user_id: userId,
-            balance: walletData.balance || 0,
-            currency: walletData.currency || 'INR'
-          } as Wallet);
+          // Try multiple methods to get wallet
+          let walletData = null;
+          
+          try {
+            // Method 1: Try utils API first
+            walletData = await getWalletFromUtils();
+            console.log('Wallet data from utils:', walletData);
+          } catch (err1) {
+            console.warn('Utils API failed, trying direct API:', err1);
+            
+            // Method 2: Try direct API call
+            try {
+              const API_BASE = import.meta.env.PROD 
+                ? (import.meta.env.VITE_API_URL || '') 
+                : '';
+              const apiPath = `${API_BASE}/api/wallet/balance`;
+              const url = API_BASE ? apiPath : '/api/wallet/balance';
+              
+              const response = await fetch(url, {
+                headers: {
+                  'Authorization': `Bearer ${sessionData.session.access_token}`,
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                },
+              });
+              
+              if (response.ok) {
+                walletData = await response.json();
+                console.log('Wallet data from direct API:', walletData);
+              } else {
+                const errorText = await response.text();
+                console.warn('Wallet API returned error:', response.status, errorText);
+              }
+            } catch (err2) {
+              console.error('Direct API also failed:', err2);
+            }
+          }
+          
+          if (walletData && typeof walletData.balance === 'number' && walletData.balance !== null && walletData.balance !== undefined) {
+            setWallet({
+              wallet_id: walletData.wallet_id || 0,
+              user_id: userId,
+              balance: walletData.balance,
+              currency: walletData.currency || 'INR'
+            } as Wallet);
+          } else {
+            console.warn('Invalid wallet data or balance is null/undefined:', walletData);
+            // Don't set wallet to 0, set it to null so UI can show appropriate message
+            setWallet(null);
+          }
         } catch (walletError: any) {
-          console.warn('Error fetching wallet from API:', walletError);
-          setWallet({ 
-            wallet_id: 0, 
-            user_id: userId as any,
-            balance: 0, 
-            currency: 'INR' 
-          } as any);
+          console.error('Error fetching wallet:', walletError);
+          setWallet(null);
         }
 
         try {

@@ -89,23 +89,47 @@ export default function StocksPage() {
     const fetchStocks = async () => {
       try {
         setError(null);
+        setLoading(true);
         
-        const response = await fetch('/api/assets');
+        // Use the API base URL for production
+        const API_BASE = import.meta.env.PROD 
+          ? (import.meta.env.VITE_API_URL || '') 
+          : '';
+        const apiPath = `${API_BASE}/api/assets`;
+        const url = API_BASE ? apiPath : '/api/assets';
+        
+        const response = await fetch(url, {
+          headers: {
+            'Accept': 'application/json',
+          },
+        });
+        
         if (!response.ok) {
-          throw new Error('Failed to fetch stocks');
+          const errorText = await response.text();
+          console.error('Stocks API error:', response.status, errorText);
+          throw new Error(`Failed to fetch stocks: ${response.status} ${errorText.substring(0, 100)}`);
         }
         
         const data = await response.json();
+        
+        // Handle both array and object with items property
+        const assetsArray = Array.isArray(data) ? data : (data.items || data.assets || []);
+        
         // Filter only stocks (not mutual funds)
         // If asset_type is not present, assume all are stocks (backward compatibility)
-        const stocksOnly = (data || []).filter((asset: Stock) => 
-          !asset.asset_type || asset.asset_type === 'stock'
+        const stocksOnly = (assetsArray || []).filter((asset: Stock) => 
+          asset && (!asset.asset_type || asset.asset_type === 'stock')
         );
+        
         setStocks(stocksOnly);
-        setLoading(false); // Always set loading to false after fetch completes
+        setLoading(false);
       } catch (err: any) {
         console.error('Error fetching stocks:', err);
-        setError(err.message || 'Failed to load stocks');
+        // Better error message
+        const errorMsg = err.message?.includes('pattern') 
+          ? 'Database connection error. Please check backend configuration.'
+          : err.message || 'Failed to load stocks';
+        setError(errorMsg);
         setLoading(false);
       }
     };
@@ -126,28 +150,72 @@ export default function StocksPage() {
         const { data: { session } } = await supabase.auth.getSession();
         if (session) {
           try {
-            const walletResponse = await fetch('/api/wallet/balance', {
+            // Use the API base URL for production
+            const API_BASE = import.meta.env.PROD 
+              ? (import.meta.env.VITE_API_URL || '') 
+              : '';
+            const apiPath = `${API_BASE}/api/wallet/balance`;
+            const url = API_BASE ? apiPath : '/api/wallet/balance';
+            
+            const walletResponse = await fetch(url, {
               headers: {
                 'Authorization': `Bearer ${session.access_token}`,
                 'Accept': 'application/json',
+                'Content-Type': 'application/json',
               },
             });
             
             if (walletResponse.ok) {
               const walletData = await walletResponse.json();
               // Only set wallet if we have actual data (not fake defaults)
-              if (walletData && typeof walletData.balance === 'number') {
-                setWallet(walletData);
+              if (walletData && typeof walletData.balance === 'number' && walletData.balance !== null) {
+                setWallet({
+                  wallet_id: walletData.wallet_id || 0,
+                  user_id: session.user.id,
+                  balance: walletData.balance,
+                  currency: walletData.currency || 'INR'
+                } as Wallet);
               } else {
                 console.warn('Invalid wallet data received:', walletData);
-                setWallet(null);
+                // Try to use getWallet from utils as fallback
+                try {
+                  const { getWallet } = await import('../utils/api');
+                  const walletFromUtils = await getWallet();
+                  if (walletFromUtils && typeof walletFromUtils.balance === 'number') {
+                    setWallet({
+                      wallet_id: 0,
+                      user_id: session.user.id,
+                      balance: walletFromUtils.balance,
+                      currency: walletFromUtils.currency || 'INR'
+                    } as Wallet);
+                  } else {
+                    setWallet(null);
+                  }
+                } catch {
+                  setWallet(null);
+                }
               }
             } else {
-              // If API returns error, wallet might not exist yet
+              // If API returns error, try alternative method
               console.warn('Failed to fetch wallet:', walletResponse.status);
-              setWallet(null);
+              try {
+                const { getWallet } = await import('../utils/api');
+                const walletFromUtils = await getWallet();
+                if (walletFromUtils && typeof walletFromUtils.balance === 'number') {
+                  setWallet({
+                    wallet_id: 0,
+                    user_id: session.user.id,
+                    balance: walletFromUtils.balance,
+                    currency: walletFromUtils.currency || 'INR'
+                  } as Wallet);
+                } else {
+                  setWallet(null);
+                }
+              } catch {
+                setWallet(null);
+              }
             }
-          } catch (walletError) {
+          } catch (walletError: any) {
             console.warn('Error fetching wallet (non-critical):', walletError);
             setWallet(null);
           }
