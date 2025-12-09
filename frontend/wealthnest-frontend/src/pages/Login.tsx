@@ -50,23 +50,28 @@ export default function Login() {
         return;
       }
 
-      // Then call Express /api/auth/login to check admin status
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${supabaseData.session.access_token}`,
-        },
-      });
+      // Then call Express /api/auth/login to check admin status (optional - backend might not be available)
+      let loginData = { isAdmin: false };
+      try {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${supabaseData.session.access_token}`,
+          },
+        });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        setError(errorData.error || 'Login failed');
-    setLoading(false);
-        return;
+        if (response.ok) {
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            loginData = await response.json();
+          }
+        }
+        // If backend is not available, continue with default (non-admin) login
+      } catch (err) {
+        // Backend API not available - continue with Supabase auth only
+        console.warn('Backend API not available, using Supabase auth only');
       }
-
-      const loginData = await response.json();
 
       // Ensure user profile exists after successful login
       if (!loginData.isAdmin) {

@@ -108,15 +108,21 @@ export default function Home() {
           throw new Error('Failed to fetch market buzz');
         }
         
+        // Check if response is actually JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          throw new Error('Invalid response format');
+        }
+        
         const data = await response.json();
         if (active) {
           setBuzz(data.items || marketBuzz); // Fallback to static data if empty
         }
       } catch (err: any) {
-        console.error('Error fetching market buzz:', err);
+        // Silently fail and use fallback data - API might not be available
         if (active) {
-          setBuzzError(err.message || 'Failed to load market buzz');
           setBuzz(marketBuzz); // Fallback to static data on error
+          setBuzzError(null); // Don't show error, just use fallback
         }
       } finally {
         if (active) {
@@ -151,21 +157,30 @@ export default function Home() {
         
         const response = await fetch('/api/market/word-of-the-day');
         if (!response.ok) {
-          // Even if response is not ok, try to parse the JSON as backend returns fallback data
-          const errorData = await response.json().catch(() => null);
-          if (errorData && errorData.term) {
-            // Backend returned fallback data, use it
-            if (active) {
-              const normalized = {
-                ...errorData,
-                word: errorData.term || errorData.word || 'Financial Term',
-                term: errorData.term || errorData.word || 'Financial Term'
-              };
-              setWotd(normalized);
+          // Check if response is JSON before trying to parse
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            const errorData = await response.json().catch(() => null);
+            if (errorData && errorData.term) {
+              // Backend returned fallback data, use it
+              if (active) {
+                const normalized = {
+                  ...errorData,
+                  word: errorData.term || errorData.word || 'Financial Term',
+                  term: errorData.term || errorData.word || 'Financial Term'
+                };
+                setWotd(normalized);
+              }
+              return;
             }
-            return;
           }
           throw new Error('Failed to fetch word of the day');
+        }
+        
+        // Check if response is actually JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          throw new Error('Invalid response format');
         }
         
         const data = await response.json();
@@ -179,10 +194,10 @@ export default function Home() {
           setWotd(normalized);
         }
       } catch (err: any) {
-        console.error('Error fetching word of the day:', err);
+        // Silently fail and use fallback data - API might not be available
         if (active) {
-          setWotdError(err.message || 'Failed to load word of the day');
           setWotd(fallbackWotd); // Fallback to static data on error
+          setWotdError(null); // Don't show error, just use fallback
         }
       } finally {
         if (active) {
