@@ -18,13 +18,48 @@ export default function Signup() {
     setError(null);
     setMessage(null);
     
+    // Trim and validate email
+    const trimmedEmail = email.trim().toLowerCase();
+    const trimmedName = name.trim();
+    const trimmedPassword = password.trim();
+    
+    if (!trimmedEmail) {
+      setError('Email is required');
+      setLoading(false);
+      return;
+    }
+    
+    if (!trimmedName) {
+      setError('Name is required');
+      setLoading(false);
+      return;
+    }
+    
+    if (!trimmedPassword) {
+      setError('Password is required');
+      setLoading(false);
+      return;
+    }
+    
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      setError('Please enter a valid email address');
+      setLoading(false);
+      return;
+    }
+    
     try {
       const response = await apiFetch('/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password, name }),
+        body: JSON.stringify({ 
+          email: trimmedEmail, 
+          password: trimmedPassword, 
+          name: trimmedName 
+        }),
       });
       
       setLoading(false);
@@ -107,7 +142,9 @@ export default function Signup() {
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
+                onBlur={e => setEmail(e.target.value.trim().toLowerCase())}
                 required
+                autoComplete="email"
                 className="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all hover:border-sky-400"
                 placeholder="your.email@example.com"
               />
